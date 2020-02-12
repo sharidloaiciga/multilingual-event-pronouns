@@ -1,0 +1,208 @@
+#! /usr/bin/env python3
+# -*- encoding: utf-8 -*-
+
+from sklearn import tree
+from sklearn import preprocessing
+from sklearn.metrics import classification_report
+from sklearn.tree.export import export_text
+from sklearn.model_selection import train_test_split
+
+from imblearn.under_sampling import ClusterCentroids
+from imblearn.over_sampling import RandomOverSampler
+from collections import Counter
+import re
+import os
+import numpy as np
+
+
+def import_data(dir_name, n_examples, unseen=False):
+
+    languages = os.listdir(dir_name)
+
+    features = np.chararray((n_examples, len(languages)), itemsize=10) # itemsize = wordsize
+    Ys = []
+    for i in range(len(languages)):
+        lang = languages[i]
+        row = 0
+        with open(dir_name + "/" + lang, "r", encoding="utf-8") as f:
+            for line in f:
+                #         0               1        2      3         4              5
+                # ep-09-01-12-012.xml 	 18 	 46.1 	 it 	 unknown_ref 	 alors
+                cols = line.strip("\n").split("\t")
+                if ("en_fr" in lang) and unseen:
+                    classification = cols[-1].replace(" ", "")
+                    Ys.append(classification)
+                elif ("en_fr" in lang) and not unseen:
+                    classification = cols[4].replace(" ", "")
+                    Ys.append(classification)
+                else:
+                    trans = cols[-1].replace(" ", "") # different column if I use noUNK !!!
+                    features[row, i] = trans.encode('utf-8')
+                row += 1
+    features_list = features.tolist()
+    return features_list, Ys
+
+
+def import_manual_data(dir_name, n_examples):
+
+    languages = ["600_es", "600_et", "600_fi", "600_hu", "600_it", "600_lv", "600_man_classes", "600_nl",
+                 "600_pl", "600_pt", "600_ro", "600_sk", "600_sl", "600_sv"]
+
+    features = np.chararray((n_examples, len(languages)), itemsize=10) # itemsize = wordsize
+    Ys = []
+    for i in range(len(languages)):
+        lang = languages[i]
+        row = 0
+        with open(dir_name + "/" + lang, "r", encoding="utf-8") as f:
+            for line in f:
+                #   0
+                # alors
+                if lang == "600_man_classes":
+                    classification = line.strip("\n").replace(" ", "")
+                    Ys.append(classification)
+                else:
+                    trans = line.strip("\n").replace(" ", "")
+                    features[row, i] = trans.encode('utf-8')
+                    row += 1
+
+    features_list = features.tolist()
+    return features_list, Ys
+
+
+def interpret(f_enc, clf):
+
+    #print("feature categories ==>")
+    #print(f_enc.categories_) # categories of features
+
+    print("****************")
+
+    c = 0
+    features_dict = {}
+    for l in f_enc.categories_:
+        for feat in l:
+            features_dict[c] = feat
+            c += 1
+
+    # draw tree
+    r = export_text(clf)
+
+    createtree = open("tree.txt", "w", encoding="utf-8")
+    createtree.write(r)
+    createtree.close()
+
+    prettytree = open("tree.txt", "r", encoding="ISO-8859-1")
+
+    for line in prettytree:
+        id = re.findall(r'feature_([0-9]*)', line)
+        if id:
+            id_id = id[0]
+            word = features_dict[int(id_id)].decode("utf-8")
+            new_line = line.replace('feature_'+id_id, word).strip()
+            print(new_line)
+        else:
+            print(new_line)
+    prettytree.close()
+
+
+
+def main():
+    data_dir = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
+               "multilingual_improved_align/noUNK_noGOLD"
+
+    # n_examples = 69431  # multilingual with unknown_ref class
+    # n_examples = 17534 # multilingual all without unknown_ref class
+    # n_examples = 22736 # multilingual_improved_aling without unknown_ref
+    n_examples = 22554 # multilingual_improved_aling noUNKnoGOLD
+
+    # n_examples = 600  # manual annotation
+
+    # x, y = import_manual_data(data_dir, n_examples)
+    x, y = import_data(data_dir, n_examples, unseen=False)
+
+    print(len(x), len(y))
+
+    # print("********************")
+    # this is just to print some examples for the presentation
+    #
+    # for each in x[50:70]:
+    #     temp = []
+    #     for word in each:
+    #         try:
+    #             word.decode("utf-8")
+    #             temp.append(word.decode("utf-8"))
+    #         except UnicodeError:
+    #             temp.append(word)
+    #     print(temp)
+    # print(y[50:70])
+
+
+    # encode and transform training data
+
+    f_enc = preprocessing.OneHotEncoder(handle_unknown="ignore")
+    f_enc.fit(x)
+    features = f_enc.transform(x)
+
+    l_enc = preprocessing.LabelEncoder()
+    l_enc.fit(y)
+    labels = l_enc.transform(y)
+
+    # transform new test data
+    unseen_data = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
+                  "multilingual_improved_align/"
+    auto_and_man = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
+                  "multilingual_improved_align/onlyGOLD_fromAUTOMATIC"
+
+    # x_unseen_test, y_unseen_test = import_manual_data(unseen_data, 600)
+    x_unseen_test, y_unseen_test = import_data(auto_and_man, 182, unseen=False)
+
+    print("length manual test", len(x_unseen_test), len(y_unseen_test))
+
+    unseen_feats = f_enc.transform(x_unseen_test)
+    unseen_labels = l_enc.transform(y_unseen_test)
+
+    # undersampling
+    # cc = ClusterCentroids(random_state=0)
+    # X_resampled, y_resampled = cc.fit_resample(features, labels)
+
+    # oversampling
+    ros = RandomOverSampler(random_state=0)
+    X_resampled, y_resampled = ros.fit_resample(features, labels)
+
+    print("resampled y's", sorted(Counter(y_resampled).items()))
+
+    # spliting
+
+    #X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3,shuffle=True,random_state=109)
+    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3,shuffle=True,random_state=109)
+    # train
+
+    clf = tree.DecisionTreeClassifier()
+    clf = clf.fit(X_train, y_train)
+
+    print( "=====>", X_train.shape[0], y_test.shape[0] )
+    # # test
+
+    prediction = clf.predict(unseen_feats) #X_test
+    gold = unseen_labels # y_test
+
+    #prediction = clf.predict(X_test) #X_test
+    #gold = y_test # y_test
+
+    print("features_importances ==>")
+    print(clf.feature_importances_)
+
+    print("label categories ==>")
+    print(l_enc.classes_) # categories of labels
+
+    print("prediction ==> ", prediction)
+    print("gold ===>", gold)
+    print(classification_report(gold, prediction))
+    #
+    # # # interpretability
+    #
+    interpret(f_enc, clf)
+
+
+
+if __name__ == "__main__":
+    main()
