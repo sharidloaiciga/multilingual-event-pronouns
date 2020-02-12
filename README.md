@@ -2,10 +2,10 @@
 
 Here you will find all the materials necessary for the work presented in the paper [Exploiting Cross-Lingual Hints to Discover Event Pronouns (tentatively)](https://lrec2020.lrec-conf.org/en/).  <- enter correct link once available
 
-This is how you generate the data:
+This is how to extract the training data
 ----
 
-1. Get overlapping sentences
+1. Get the common sentences to all Europarl languages
 
 Opus tools 
 
@@ -24,16 +24,12 @@ example:
 example:
 ./generate-mt-data.py ~/data/mt/en-fr/Europarl/parsed/en/ ~/data/mt/en-fr/Europarl/parsed/fr/ ~/data/mt/en-fr/Europarl/smt/en-fr/bitext.xml ~/data/mt/en-fr/Europarl/smt/en-fr/model/aligned.grow-diag-final-and > europarl_nom_alltrans_1kdocs 
 
-Data:
+Some additional data:
 ---
 
 Besides the automatically generated data, we also include a manually annotated sample of 600 instances.
 
 
-Results:
----
-
-The reported results are obtained using the scripts below.
 
 
 
