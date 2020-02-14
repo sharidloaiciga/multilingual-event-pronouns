@@ -1,0 +1,416 @@
+\documentclass[10pt, a4paper]{article} \usepackage{lrec} \usepackage{multibib}
+\newcites{languageresource}{Language Resources} \usepackage{graphicx}
+\usepackage{tabularx} \usepackage{soul}
+
+\usepackage{booktabs}
+% for eps graphics
+% 
+\usepackage{epstopdf} \usepackage[utf8]{inputenc}
+
+\usepackage{hyperref} \usepackage{xstring}
+
+\usepackage{color}
+
+\definecolor{lightgray}{rgb}{0.83, 0.83, 0.83}
+
+\newcommand{\secref}[1]{\StrSubstitute{\getrefnumber{#1}}{.}{ }}
+
+\title{Discovery of Events in the Europarl Languages}
+
+\name{Author1, Author2, Author3}
+
+\address{Affiliation1, Affiliation2, Affiliation3 \\ Address1, Address2,
+Address3 \\ author1@xxx.yy, author2@zzz.edu, author3@hhh.com\\ \{author1,
+author5, author9\}@abc.org\\}
+
+
+\abstract{ Non-nominal co-reference is much less studied than nominal
+coreference, partly because of the lack of annotated corpora. In this paper, we
+have explored the possibility to exploit parallel multilingual corpora as a
+means of cheap supervision for the task of it-disambiguation. We found that only a very specific `event' reading is discernible using our approach.  \\ \newline
+\Keywords{`it', reference, Europarl corpus} }
+
+\begin{document}
+
+\maketitleabstract
+
+\section{Introduction}
+
+Depending on the context, the English pronoun \textit{it} can express anaphoric
+reference with a nominal entity antecedent or with a
+non-nominal antecedent such as an event. It can also be used
+pleonastically. The examples \ref{ex:nominal} to \ref{ex:pleo} below illustrate these different readings. Nominal coreference has been studied
+extensively, but work on the automatic recognition of non-nominal anaphora is
+scarce, as are annotated data sets.
+
+In this paper, we evaluate the potential of multilingual parallel data to create artificial 
+training data  
+for the classification of different readings of `it', by exploiting the hypothesis that languages 
+have different preferences to encode
+the competing readings. Multilingual parallel data serves thus as a cheap
+supervision signal. 
+
+While developing the method, we found that the `event' reading can be easily
+predicted, as the languages studied here have a similar strategy for their translation. 
+Despite this, `event' uses of the pronoun `it' are not enough to generalize to
+other types of non-nominal reference. Deictic uses in particular, are expressed
+very differently and are therefore difficult to normalize.
+
+%Anaphoric non-nominals are typically discarded in the non-referring basket
+%together with pleonastics. 
+%
+%In this paper we mine examples automatically.
+%
+\begin{enumerate}
+
+\item\label{ex:nominal} \textsc{Entity reading}
+
+The infectious disease that's killed more humans than any other is
+\textbf{malaria}.  \textbf{It}'s carried in the bites of infected mosquitos.
+
+\textit{Jene Krankheit, die mehr Leute als jede andere umgebracht hat, ist
+Malaria gewesen. \textbf{Sie} wird über die Stiche von infizierten Moskitos
+übertragen.}
+
+\item\label{ex:event}\textsc{Event reading}
+
+But I think \textbf{if we lost everyone with Down syndrome},  \textbf{it} would
+be a catastrophic loss.
+
+\textit{Aber, wenn wir alle Menschen mit Down-Syndrom verlören, wäre
+\textbf{das}    ein katastrophaler Verlust.}
+
+\item\label{ex:pleo} \textsc{Pleonastic reading}
+
+And  \textbf{it} seemed to me that there were three levels of acceptance that
+needed to take place.
+
+\textit{Und \textbf{es} schien, dass es drei Stufen der Akzeptanz gibt, die alle
+zum Tragen kommen mussten.}
+
+\end{enumerate}
+
+
+
+\section{Related Work}
+
+The study of reference has mostly focused on nominal expressions and their
+relationships of coreference. Therefore, the biggest annotation efforts in the
+field of coreference resolution have also focused on nominal coreference.
+Ontonotes \cite{pradhan-xue-2009-ontonotes}, the largest and most used corpus today, 
+for instance, only includes verbs if ``they can be co-referenced with an
+existing noun phrase'' according to its guidelines.
+
+%They give the following example:
+%
+% Sales of passenger cars [grew]x 22\%. [The strong growth]x followed
+% year-to-year increases.
+% 
+It follows that most anaphora and coreference resolution systems focus on
+nominal reference. Before current state of art systems which work in a
+end-to-end fashion, these systems needed to explicitly do mention classification
+in order to exclude non-referential mentions before any resolution was attempted.
+In this context, the pronoun `it' has been targeted, as many of its uses are
+non-referential. \cite{Evans2001} proposes the classification of the pronoun `it' into seven
+classes using contextual features. \cite{Boyd2005} report similar results of
+around 80\% accuracy using more complex syntactic patterns.
+
+The many uses of `it' are also particularly relevant in dialog texts, where event reference is much more common than in news data. In this context, \cite{muller-2007-resolving} proposes a disambiguation of `it' together with the deictic pronouns `this' and `that'.  Last, \cite{Lee2016} create a corpus for it-disambiguation in question answering, a domain close to dialog. It is worth noting that current coreference resolution systems are not trained to manage dialog data.
+
+More recently,  \cite{Loaiciga2017itrnn} has proposed a semi-supervised setup based on a
+combination of syntactic and semantic features used in a two-step classification
+approach where a maximum entropy classifier is used first and a recurrent
+recursive network (RNN) after. \cite{yaneva-etal-2018-classifying}, on the other
+hand, reports on experiments using features from eye gaze that prove to be more
+effective than any of the other types of features reported in previous works.
+
+
+
+
+\section{Method}
+
+We used the corpus Europarl \cite{Koehn2005} v8 as found in the OPUS collection
+\cite{TIEDEMANN12.463}. OPUS also includes parsed and sentence-level and
+word-level alignments files for the Europarl corpus. We used all 15 languages
+paired with English as the source language. The languages are German, Finnish, Swedish, Italian, Latvian, Dutch, Hungarian, Polish, Slovenian, Portuguese, Slovak, Romanian, Estonian, and Spanish.  
+
+The overall method is as follows:
+
+\begin{enumerate}\setlength\itemsep{1em}
+
+\item Europarl is a parallel corpus of translations
+between the language pairs, but the amount of data from one language to another
+varies. Therefore we began by extracting only the set of common sentences
+accross all languages. This already reduced the data from 2,039,537 segments to
+286,053.
+
+\item  Next, we relied on the English parsed files to
+identify all instances of the pronoun `it'.
+
+\item We then used the word-level alignment files to
+extract the aligned translation in all the languages.
+
+Word alignment is not perfect. One-to-one correspondences are unstable for
+particles and other small word forms, in particular if they depend on verbs and might
+be translated by just one verb form, virtually disappearing then from the
+translation. Pronouns in particular, depending on the language, might not be
+translated for instance if the language is a pro-drop one, or they might be
+translated as a full nominal phrase, because the language has a different use of
+pronouns.
+
+For improving the quality of the word alignments, we used a window of -3 and
++3 tokens before and after the position of the aligned token. This means that if
+the translated token was not a pronoun (we have POS information from the parsing
+files), we would search for a pronoun translation within the window range.
+
+\item We aim at creating English data in which the instances of
+`it' are annotated as `entity', `event' or `pleonastic'. While the three
+readings use the same pronoun in English, we rely on the assumption that they
+have at least partially different realizations in the other languages.
+
+For the expletives, we took all instances of `it' analyzed as expletives in the
+parsed files. These files have been processed using universal dependencies v2.0
+(UDPipe parser, models from 2017-08-01), which includes the dedicated dependency
+relation \texttt{expl} \cite{bouma-etal-2018-expletives}.
+
+Taking advantage of the parallel data, we decided to use French as a seed language, and
+consider all instances translated with the neutral demonstrative pronouns
+\textit{cela}, \textit{ceci} or \textit{ça} as events. In French, these pronoun
+are typically used to reference proposition or phrases. For the entity nominal
+case, we took the French translations \textit{elle} and \textit{il}. From 69,431
+`it' pronouns, we labeled 22,574 instances, corresponding to approximately 30\%
+(Tables \ref{tab:classrules} and \ref{tab:resultinglabels}).
+
+\item Last, translations from the other 14 languages than French are used as features for
+the classification task. Each line in Figure \ref{fig:featuresexample}
+represents a feature vector.
+
+\end{enumerate}
+
+
+
+
+\begin{table}\centering \begin{tabular}{ccc} \toprule \textbf{English} &
+\textbf{French} &  \textbf{Class} \\ \midrule it &  \textit{elle/il}  & entity\\
+it & \textit{cela/ça/ceci} & event  \\ it  &  -- &pleonastic \\
+\bottomrule
+\end{tabular} 
+\caption{Summary of the translation assumptions for labeling the
+classes. }\label{tab:classrules} 
+\end{table}
+
+
+
+\begin{table}[h!]\centering \begin{tabular}{ccc}
+\multicolumn{3}{c}{\textbf{Label}}\\ 
+\toprule 
+Entity & Event & Pleonastic \\
+\midrule 
+11,607 & 877 &10,252\\ 
+\bottomrule 
+\end{tabular} 
+\caption{Resulting
+distribution after automatic labeling.}\label{tab:resultinglabels} 
+\end{table}
+
+
+\begin{center} \begin{figure*} \resizebox{\linewidth}{!}{
+\begin{tabular}{*{14}{l}}
+\toprule
+%\textbf{English} & \textbf{French} &  \textbf{Class} &&&&&&&&&&& \\ \midrule it
+%&  \textit{elle/il}  & entity  &&&&&&&&&&& \\ it & \textit{cela/ça/ceci} &
+%event  &&&&&&&&&&& \\ it  &  --  &&&&&&&&&&& \\ \midrule
+\multicolumn{14}{c}{\textbf{Features}}\\ \midrule DE & FI & SV & IT &LV& NL &
+HU&PL & SL & PT &  SK& RO& ET& ES  \\ &&&&&&&&&&&&&\\ \textit{dies}&\textit{on}&
+\textit{det}& \textit{e}& \textit{tas}& \textit{het}& \textit{hogy}&
+\textit{pre}& \textit{je}& empty& \textit{'}& empty& \textit{on}&
+\textit{desgracia} \\ &&&&&&&&&&&&&\\ 
+ \textit{das}&\textit{puhua}& \textit{det}& \textit{-}& \textit{ir}&
+ \textit{sprake}& \textit{lehetsége}& \textit{sa}& \textit{prav}& \textit{soar}&
+ \textit{' }& \textit{în}& empty& \textit{puede} \\
+ &&&&&&&&&&&&&\\ \textit{es} &\textit{ei}& empty& \textit{non}&
+ \textit{nepietiks}& empty& \textit{nem}& empty& \textit{zgolj}& empty&
+ \textit{'}& \textit{nu}& \textit{vaeste}& \textit{no}  \\ 
+ \bottomrule
+ \end{tabular}} \caption{Exemplification of the extracted
+ features.}\label{fig:featuresexample} 
+ \end{figure*} 
+ \end{center}
+
+
+A manual analysis of a sample of 600 instances reveals that the main problem 
+seems to be the large number of examples that cannot be labeled (column `Unknown'). 
+In addition, there is a natural imbalance in the classes (nominal and pleonastic are more
+common than events in previous work) that seems to be accentuated by the
+automatic labeling. Concerning the quality of the annotation, it can
+be seen in Table \ref{tab:manualsample600} that the automatic labeling achieves
+approximately 20\% accuracy. We believe that this is mainly due to the
+combination of two factors: word-alignment issues and many different
+translations different from the assumptions we made by using French as the seed language.  
+
+\begin{table}[h!]\centering 
+\begin{tabular}{ccccc} 
+\toprule 
+&Entity & Event &Pleonastic & Unknown \\ 
+\midrule Entity &   65  &  2   &   0     &  250  \\ 
+Event &    5  &  3   &  0  &  34\\ 
+Pleonastic& 41 & 1&  65&  134\\
+\bottomrule 
+\end{tabular} \caption{Manual evaluation of a sample of 600
+instances.}\label{tab:manualsample600} 
+\end{table}
+
+
+
+
+%\begin{table} \begin{tabular}{cccc} \multicolumn{4}{c}{\textbf{MaxEnt with
+%oversampling}}\\ \toprule
+% & Precision & Recall & Accuracy \\
+%\midrule Entity & 0.73 &0.68&    0.80 \\ Event &0.91 & 1.0 & (8,277/10,347) \\
+%Pleonastic &  0.74 & 0.72 & \\ \bottomrule \end{tabular}
+%\caption{Classification results using bootstrap resampling in a manually
+%annotated sample of 600 instances.} \end{table}
+%
+%
+%
+%
+\section{Classification Experiments}
+
+We used 22,554 generated examples in a classification setting. All the experiments were completed using the implementations of the \texttt{scikit-learn} library, including their \texttt{train\_test\_split} function. 
+
+In a first experiment, we use the generated data tor predict one of the three automatically generated labels: `entity', `event' or `pleonastic'. We report results using a maximum entropy classifier, although replication experiments using a SVM and a Naive Bayes classifier yielded very similar results. 
+
+
+\begin{table}[h!]\centering
+\begin{tabular}{ccc}
+\toprule
+\textbf{Train} & \textbf{Test} & \textbf{Total} \\
+\midrule
+15,787 & 6,767 & 22,554 \\
+\bottomrule
+\end{tabular}
+\caption{Data set split for the classification experiments. }
+\end{table}
+
+ Although the results using the automatic labels seem reasonable (Table  \ref{tab:maxentautomatic}), when using the same model to predict the manually annotated sample of 600 instances, we see a dramatic decrease in performance, in particular for the `event' class. As mentioned before, this class has a natural low frequency, which makes it more difficult to predict. 
+
+\begin{center} \begin{table}[h!]\centering 
+\begin{tabular}{l ccc}
+\multicolumn{4}{c}{ \textbf{Automatically annotated data}}\\ 
+\toprule
+\textbf{MaxEnt}& Precision & Recall & Accuracy \\ 
+\midrule \textit{it}-Entity &
+0.69 & 0.74 &   0.69\\ \textit{it}-Event & 0.48 & 0.14 & (4,669/6,767) \\
+\textit{it}-Pleonastic & 0.69 & 0.67&   \\ 
+\midrule & & & \\
+\multicolumn{4}{c}{\textbf{Manually annotated sample}}  \\ 
+\midrule
+\textbf{MaxEnt}& Precision & Recall & Accuracy \\ 
+\midrule Entity &0.53 & 0.99 &
+0.53\\ Event &0.0 & 0.0 & (318/600)\\ Pleonastic & 0.50 & 0.02 & \\ 
+\bottomrule
+\end{tabular} \caption{Classification results using a Maximum Entropy
+classifier.} 
+\end{table}\label{tab:maxentautomatic}
+\end{center}
+
+To address the problem of the uneven distribution of the classes, in a second experiment, we used bootstrap with resampling in order to achieve the same number of examples per class. 
+
+\begin{table}[h!]\centering
+\begin{tabular}{ccc}
+\toprule
+\textbf{Event} & \textbf{Entity} & \textbf{Pleonastic} \\
+\midrule
+11,496 & 11,496 & 11,496 \\
+\bottomrule
+\end{tabular}
+\caption{Equal distribution of the classes for the experiment with oversampling.}
+\end{table}
+
+In this second scenario, we obtained a comparable performance for the `entity' and `pleonastic' classes, and almost perfect scores for the `event' class. 
+
+\begin{center} \begin{table}[h!] \begin{tabular}{cccc}
+\multicolumn{4}{c}{\textbf{Oversampling of the event class}}\\ 
+\toprule
+\textbf{MaxEnt}& Precision & Recall & Accuracy \\ 
+\midrule Entity & 0.73 &0.68& 
+  0.80 \\ Event &0.91 & 1.0 & (8,277/10,347) \\ 
+  Pleonastic &  0.74 & 0.72 & \\
+\bottomrule 
+\end{tabular} 
+\caption{Classification results using bootstrap
+resampling to achieve an even distribution of the classes.}\label{tab:maxentoversampling}
+\end{table}
+\end{center}
+
+
+\section{Discussion and Conclusion}
+
+The experiments presented in the previous section seem to suggest that relying on translations as features for the different readings of `it' is a good method but only for a particular type of `event' that has a natural low frequency. Indeed, our method only produces labels for about 30\% of the total amount of pronouns `it' and within this, 'event' has the lowest absolute frequency. 
+
+Further analysis from the output of a decision tree classifier on the same data partition also suggests that this type of events are easily discernible. As shown in Figure \ref{fig:decisiontree}, the top leaves in the tree all contain equivalent translations of either `it' or `this', pronouns associated with `entity' and `event' respectively. 
+
+Although we originally sought to identify non-nominal uses of `it', through developing this method we found that the task is hard because there are many potential
+cases. 
+
+Take for instance the following example:
+
+\vspace{1em}
+
+\textsc{English} Madam President , Commissioners , can I say to you that less than a year ago we were debating in this Chamber what we were going to do about global food security , and was there enough food in the world , and we were terribly worried about \textit{it}.
+
+\textsc{French} \textit{Madame la Présidente , Mesdames et Messieurs les Commissaires , permettez -moi de vous rappeler qu' il y a moins d' un an , nous débattions en cette Assemblée de la manière de traiter la sécurité alimentaire mondiale , de la question de savoir si l' on produisait suffisamment de nourriture à l' échelle mondiale , et nous étions extrêmement préoccupés par \textbf{ces questions} .}
+
+\vspace{1em}
+
+In the example the English pronoun `it' refers to all what has previously been mentioned in the long sentence. The French translation, however, prefers a translation with a full lexical noun phrase \textit{ces questions} (these questions) for the same referential relationship. 
+
+The task could be approached semantically by identifying all abstract
+nouns referencing actions, nominalizations or eventualities in the text. Or one
+could decide to focus on particular syntactic configurations as
+\newcite{marasovic-etal-2017-mention}.
+
+\begin{figure}
+\begin{verbatim}
+ -- see_et<=0.5
+|  |--- é_pt<=0.5
+|  |  |--- tas_lv<=0.5
+|  |  |  |--- to_pl<=0.5
+|  |  |  |  |--- este_ro<=0.5
+|  |  |  |  |  |--- ez_hu<=0.5
+|  |  |  |  |  |  |--- es_es<=0.5
+|  |  |  |  |  |  |  |--- den_sv<=0.5
+|  |  |  |  |  |  |  |  |--- je_sk<=0.5
+|  |  |  |  |  |  |  |  |  |--- to_sk<=0.5
+|  |  |  |  |  |  |  |  |  |  |--se_fi<=0.5
+\end{verbatim}
+\caption{Output of a decision tree classifier. The leaves have the form \texttt{pronoun\_language}.}\label{fig:decisiontree}
+\end{figure}
+
+Non-nominal co-reference is much less studied than nominal coreference, partly
+because of the lack of annotated corpora. In this paper, we have explored the
+possibility to exploit parallel multilingual corpora as a means of cheap
+supervision for the task of it-disambiguation. Since pronoun `it' has many
+potential uses or readings, we took it a as representative of the non-nominal
+coreference phenomenon, however, we found that only a very specific `event' reading 
+is discernible using our approach. 
+
+%\cite{Martin-90}
+%
+%\newcite{Martin-90}
+%
+%
+%\section{Acknowledgements}
+%
+%Place all acknowledgements (including those concerning research grants and
+%funding) in a separate section at the end of the paper.
+%
+\section{References}
+
+\bibliographystyle{lrec} \bibliography{lrec2020_it_manylanguages}
+
+
+\bibliographystylelanguageresource{lrec}
+\bibliographylanguageresource{languageresource}
+
+\end{document}

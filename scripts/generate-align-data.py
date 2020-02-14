@@ -5,8 +5,6 @@ import sys
 import os
 import re
 import functions as f
-from bs4 import BeautifulSoup
-
 
 """
 generate MT data with pronoun translations of a language in Europarl
@@ -93,56 +91,57 @@ def get_overlapping_files(data_dir):
     languages = os.listdir(data_dir)
     common_files = []
     for lang in languages:
-        current_files = os.listdir(data_dir + "/" + lang)
-        if common_files:
-            intersection_files = set.intersection(set(common_files), set(current_files))
-            common_files = intersection_files
-        else:
-            common_files = current_files
+        if os.path.isdir(data_dir + "/" + lang):
+            current_files = os.listdir(data_dir + "/" + lang)
+            if common_files:
+                intersection_files = set.intersection(set(common_files), set(current_files))
+                common_files = intersection_files
+            else:
+                common_files = current_files
 
     return common_files
 
 
-def get_ovelapping_sentences(parse_dir, align_dir):
-
-    languages = os.listdir(parse_dir)
-    round = {}
-
-    for lang in languages:
-        if lang != "en":
-            bitext_key_file = align_dir + "/en-" + lang + "/" + "bitext.xml"
-
-            with open(bitext_key_file, "r", encoding="utf-8") as f:
-                soup = BeautifulSoup(f, "xml")
-                # first language
-                if round == {}:
-                    for doc_linking in soup.find_all("linkGrp"):
-                        src_doc = doc_linking["fromDoc"][3:-3] # "en/ep-00-01-17.xml.gz"
-                        current_sentences = []
-                        for link in doc_linking.find_all("link"):
-                            s_correspond = link["xtargets"].split(";") # ex:"36;36", "22 23;23", "38;38 39"
-                            src_sentence = s_correspond[0]
-                            current_sentences.append(src_sentence)
-
-                        round[src_doc] = current_sentences
-                else:
-                    for doc_linking in soup.find_all("linkGrp"):
-                        src_doc = doc_linking["fromDoc"][3:-3] # "en/ep-00-01-17.xml.gz"
-                        current_sentences = []
-                        for link in doc_linking.find_all("link"):
-                            s_correspond = link["xtargets"].split(";") # ex:"36;36", "22 23;23", "38;38 39"
-                            src_sentence = s_correspond[0]
-                            current_sentences.append(src_sentence)
-
-                        if src_doc in round:
-                            previous = round[src_doc]
-                            overlapping_sentences = list(set.intersection(set(previous), set(current_sentences)))
-                            if overlapping_sentences:
-                                round[src_doc] = overlapping_sentences
-                        else:
-                            round[src_doc] = current_sentences
-
-    return round
+# def get_ovelapping_sentences(parse_dir, align_dir):
+#
+#     languages = os.listdir(parse_dir)
+#     round = {}
+#
+#     for lang in languages:
+#         if lang != "en":
+#             bitext_key_file = align_dir + "/en-" + lang + "/" + "bitext.xml"
+#
+#             with open(bitext_key_file, "r", encoding="utf-8") as f:
+#                 soup = BeautifulSoup(f, "xml")
+#                 # first language
+#                 if round == {}:
+#                     for doc_linking in soup.find_all("linkGrp"):
+#                         src_doc = doc_linking["fromDoc"][3:-3] # "en/ep-00-01-17.xml.gz"
+#                         current_sentences = []
+#                         for link in doc_linking.find_all("link"):
+#                             s_correspond = link["xtargets"].split(";") # ex:"36;36", "22 23;23", "38;38 39"
+#                             src_sentence = s_correspond[0]
+#                             current_sentences.append(src_sentence)
+#
+#                         round[src_doc] = current_sentences
+#                 else:
+#                     for doc_linking in soup.find_all("linkGrp"):
+#                         src_doc = doc_linking["fromDoc"][3:-3] # "en/ep-00-01-17.xml.gz"
+#                         current_sentences = []
+#                         for link in doc_linking.find_all("link"):
+#                             s_correspond = link["xtargets"].split(";") # ex:"36;36", "22 23;23", "38;38 39"
+#                             src_sentence = s_correspond[0]
+#                             current_sentences.append(src_sentence)
+#
+#                         if src_doc in round:
+#                             previous = round[src_doc]
+#                             overlapping_sentences = list(set.intersection(set(previous), set(current_sentences)))
+#                             if overlapping_sentences:
+#                                 round[src_doc] = overlapping_sentences
+#                         else:
+#                             round[src_doc] = current_sentences
+#
+#     return round
 
 
 def print_sentence(parses, key, position):
@@ -217,26 +216,23 @@ def compensate_align(tgt_prons, parses):
 
 def main():
 
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 6:
 
-        sys.stderr.write("Usage: {} {} {} {} \n".format(sys.argv[0], "src_parses_dir", "align_dir", "language"))
+        sys.stderr.write("Usage: {} {} {} {} {} {} \n".format(sys.argv[0], "parse_dir", "overlap_files_dir",
+                                                           "align_dir", "src_lang", "tgt_lang"))
         sys.exit(1)
 
+    # languages # es/ et/ fi/ fr/ hu/ it/ lv/ nl/ pl/ pt/ ro/ sk/ sl/ sv/ en/
+    src_lang = sys.argv[4]
+    tgt_lang = sys.argv[5]
     parse_dir = sys.argv[1]
-    src_parse_dir = parse_dir + "/en/"  # /Users/xloish/data/mt/v8/parsed/Europarl/parsed + "/" + en
-    lang = sys.argv[3] # es/ et/ fi/ fr/ hu/ it/ lv/ nl/ pl/ pt/ ro/ sk/ sl/ sv/
-    tgt_parse_dir = parse_dir + "/" + lang + "/"
-    align_dir = sys.argv[2] # "/Users/xloish/data/mt/v8/smt/Europarl/smt" or
-    #/Users/xloish/data/mt/v8/fromOpus
+    src_parse_dir = parse_dir + "/" + src_lang + "/"  # parsing files from Opus
+    tgt_parse_dir = parse_dir + "/" + tgt_lang + "/"
+    bitext_file = sys.argv[2] + "/" + src_lang + "-" + tgt_lang + ".xml" # bitexts (xml files from Opus)
+    data_alignment = sys.argv[3] + "/" + src_lang + "-" + tgt_lang + "/model/" + "aligned.grow-diag-final-and"
 
-    bitext_key_file = align_dir + "/en-" + lang + ".xml"#"bitext.xml"
-    data_alignment = "/Users/xloish/data/mt/v8/smt/Europarl/smt/en-" + lang + "/model/" + "aligned.grow-diag-final-and"
-
-    # all valid sentences per document
-    # valid_sentences = get_ovelapping_sentences(parse_dir, align_dir)"
-
-    # current document and sentences
-    document_links, sentence_links = f.read_bitext_correspondances(bitext_key_file)
+    # current language pair
+    document_links, sentence_links = f.read_bitext_correspondances(bitext_file)
     alignments_srctgt = f.read_word_alignments(data_alignment, sentence_links)
     files = document_links.keys()
 
@@ -264,15 +260,11 @@ def main():
         # get alignment points
         align_points_prons = identify_prons_alignment_points(src_prons, alignments)
 
-        # get target words correspoding to the alignment points
-
+        # get target words corresponding to the alignment points
         tgt_prons = identify_targets(adjusted_tgt, align_points_prons)
 
         # sliding window to compensate bad alignment
-
         better_tgt_prons = compensate_align(tgt_prons, adjusted_tgt)
-
-        # todo: with the first pair I get the classes, but then just the translations
 
         for key in src_prons:
             for i in range(len(src_prons[key])):
@@ -285,7 +277,7 @@ def main():
                 temp = better_tgt_prons[key][i]
 
                 # for manual annotation
-                text_target = print_sentence(adjusted_tgt, key, tgt_prons[key][i])
+                # text_target = print_sentence(adjusted_tgt, key, tgt_prons[key][i])
 
                 tgt_pron = "empty"
                 if not temp:
@@ -296,20 +288,18 @@ def main():
                     tgt_pron = temp[0][0].lower() # take the first in case of multiple alignment points
 
                     # for manual annotation
-                    text_target = print_sentence(adjusted_tgt, key, temp[0][1])
-
+                    # text_target = print_sentence(adjusted_tgt, key, temp[0][1])
                 # for manual annotation
-                text_sentence = print_sentence(adjusted_src, key, src_pron_position)
+                # text_sentence = print_sentence(adjusted_src, key, src_pron_position)
 
-
-                if lang == "fr":
+                if tgt_lang == "fr":
                     classification = guess_class(tgt_pron, src_pron_deprel)
-                    # print(src_file, "\t", key, "\t", src_pron_position, "\t", src_pron, "\t",
-                    #       classification, "\t", tgt_pron)
+                    print(src_file, "\t", key, "\t", src_pron_position, "\t", src_pron, "\t",
+                          classification, "\t", tgt_pron)
 
                     # this is for the manual annotation
-                    print(src_file, "\t", text_sentence, "\t", text_target, "\t", key, "\t", src_pron_position, "\t", src_pron, "\t",
-                          classification, "\t", tgt_pron)
+                    #print(src_file, "\t", text_sentence, "\t", text_target, "\t", key, "\t", src_pron_position, "\t", src_pron, "\t",
+                    #      classification, "\t", tgt_pron)
 
                 else:
                     print(src_file, "\t", key, "\t", src_pron_position, "\t", tgt_pron)
