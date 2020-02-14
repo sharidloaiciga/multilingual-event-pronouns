@@ -11,7 +11,7 @@ Opus tools
 
 2. Get the word-aligned translations of English pronoun _it_ for a specific language
 
-`scripts/generate-align-data.py parse_dir overlap_files_dir alignment_dir source_language target_language  > out-file`
+`./generate-align-data.py parse_dir overlap_files_dir alignment_dir source_language target_language  > out-file`
 
 example::
 
