@@ -102,48 +102,6 @@ def get_overlapping_files(data_dir):
     return common_files
 
 
-# def get_ovelapping_sentences(parse_dir, align_dir):
-#
-#     languages = os.listdir(parse_dir)
-#     round = {}
-#
-#     for lang in languages:
-#         if lang != "en":
-#             bitext_key_file = align_dir + "/en-" + lang + "/" + "bitext.xml"
-#
-#             with open(bitext_key_file, "r", encoding="utf-8") as f:
-#                 soup = BeautifulSoup(f, "xml")
-#                 # first language
-#                 if round == {}:
-#                     for doc_linking in soup.find_all("linkGrp"):
-#                         src_doc = doc_linking["fromDoc"][3:-3] # "en/ep-00-01-17.xml.gz"
-#                         current_sentences = []
-#                         for link in doc_linking.find_all("link"):
-#                             s_correspond = link["xtargets"].split(";") # ex:"36;36", "22 23;23", "38;38 39"
-#                             src_sentence = s_correspond[0]
-#                             current_sentences.append(src_sentence)
-#
-#                         round[src_doc] = current_sentences
-#                 else:
-#                     for doc_linking in soup.find_all("linkGrp"):
-#                         src_doc = doc_linking["fromDoc"][3:-3] # "en/ep-00-01-17.xml.gz"
-#                         current_sentences = []
-#                         for link in doc_linking.find_all("link"):
-#                             s_correspond = link["xtargets"].split(";") # ex:"36;36", "22 23;23", "38;38 39"
-#                             src_sentence = s_correspond[0]
-#                             current_sentences.append(src_sentence)
-#
-#                         if src_doc in round:
-#                             previous = round[src_doc]
-#                             overlapping_sentences = list(set.intersection(set(previous), set(current_sentences)))
-#                             if overlapping_sentences:
-#                                 round[src_doc] = overlapping_sentences
-#                         else:
-#                             round[src_doc] = current_sentences
-#
-#     return round
-
-
 def print_sentence(parses, key, position):
 
     #[('Although', '3.1', 'advmod', 'noMorph', '3.7', 'ADV'),
