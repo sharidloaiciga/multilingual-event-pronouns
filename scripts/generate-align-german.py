@@ -58,8 +58,8 @@ def find_alignment_points(list_aligns, position):
         s_t = pair.split("-")
         s = int(s_t[0])
         t = int(s_t[1])
-        if s == position:
-            al_points.append(t)
+        if t == position:
+            al_points.append(s)
     return al_points
 
 def identify_targets(parsed_sentences, alignment_points):
@@ -229,10 +229,10 @@ def main():
         align_points_prons = identify_prons_alignment_points(src_prons, alignments)
 
         # get target words corresponding to the alignment points
-        tgt_prons = identify_targets(adjusted_tgt, align_points_prons)
+        tgt_prons = identify_targets(adjusted_src, align_points_prons)
 
         # sliding window to compensate bad alignment
-        better_tgt_prons = compensate_align(tgt_prons, adjusted_tgt)
+        better_tgt_prons = compensate_align(tgt_prons, adjusted_src)
 
         for key in src_prons:
             for i in range(len(src_prons[key])):
