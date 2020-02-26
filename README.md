@@ -7,9 +7,9 @@ This is how to extract the training data
 
 1. Get the common sentences to all Europarl languages using [tools from OPUS corpus.](http://opus.nlpl.eu/trac/wiki/Tools/Opus2Multi)
 
-`opus2multi /proj/nlpl/data/OPUS/Europarl/v8/xml en es et fi fr hu it lv nl pl pt ro sk sl sv de  
+`opus2multi /proj/nlpl/data/OPUS/Europarl/v8/xml en es et fi fr hu it lv nl pl pt ro sk sl sv de `
 
-find all common documents ...  
+`find all common documents ...  
 number of documents in sv: 10304  
 number of documents in pt: 10344  
 number of documents in et: 9035  
@@ -25,7 +25,7 @@ number of documents in fr: 10360
 number of documents in de: 10161  
 number of documents in ro: 7502  
 number of documents in sk: 8993  
-number of common aligned docs: 7004  `
+number of common aligned docs: 7004 `
 
 2. Get the word-aligned translations of English pronoun _it_ for a specific language
 
