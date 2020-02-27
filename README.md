@@ -19,7 +19,7 @@ This is how to extract the training data
 `number of documents in pl: 9041`   
 `number of documents in lv: 8991`   
 `number of documents in nl: 10345`   
-`number of documents in fi: 10227` 
+`number of documents in fi: 10227`  
 `number of documents in sl: 8967`   
 `number of documents in fr: 10360`    
 `number of documents in de: 10161`    
