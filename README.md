@@ -35,12 +35,7 @@ example::
 
 ./generate-align-data.py ~/data/mt/v8/parsed/Europarl/parsed ~/data/mt/v8/fromOpus ~/data/mt/v8/smt/Europarl/smt en pt  >  enpt 
 
-3. Get the classes for the data??
-
-`scripts/generate-mt-data.py parsed-source-language-dir parsed-target-language-dir bitex-file alignment-output-file > out-file`
-
-example:
-./generate-mt-data.py ~/data/mt/en-fr/Europarl/parsed/en/ ~/data/mt/en-fr/Europarl/parsed/fr/ ~/data/mt/en-fr/Europarl/smt/en-fr/bitext.xml ~/data/mt/en-fr/Europarl/smt/en-fr/model/aligned.grow-diag-final-and > europarl_nom_alltrans_1kdocs 
+3. 
 
 Some additional data:
 ---
