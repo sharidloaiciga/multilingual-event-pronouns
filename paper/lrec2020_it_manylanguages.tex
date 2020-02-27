@@ -3,6 +3,7 @@
 \usepackage{tabularx} \usepackage{soul}
 
 \usepackage{booktabs}
+\usepackage[symbol]{footmisc}
 
 % for eps graphics
 % 
@@ -16,13 +17,14 @@
 
 \newcommand{\secref}[1]{\StrSubstitute{\getrefnumber{#1}}{.}{ }}
 
+
 \title{Exploiting Cross-Lingual Hints to Discover Event Pronouns}
 
-\name{Sharid Loáiciga$^1$, Christian Hardmeier$^2$  \& Asad Sayeed$^3$}
+\name{Sharid Loáiciga$^1$*\footnotemark, Christian Hardmeier$^2$  \& Asad Sayeed$^3$}
 
-\address{$^1$Department of Linguistics, University of Potsdam \\  
+\address{$^1$ CoLab Potsdam, Department of Linguistics, University of Potsdam \\  
 $^2$ Department of Linguistics, Uppsala University \\
-$^3$ Department of Philosophy, Linguistics and Theory of Science, University of
+$^3$ CLASP, Department of Philosophy, Linguistics and Theory of Science, University of
 Gothenburg  \\ 
 sharid.loaiciga@gmail.com, christian.hardmeier@lingfil.uu.se, asad.sayeed@gu.se}
 
@@ -33,11 +35,18 @@ have explored the possibility to exploit parallel multilingual corpora as a
 means of cheap supervision for the task of it-disambiguation. We found that only a very specific `event' reading is discernible using our approach.  \\ \newline
 \Keywords{`it', reference, Europarl corpus} }
 
+
 \begin{document}
+
 
 \maketitleabstract
 
 \section{Introduction}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\footnotetext[1]{Work completed while the first author was affiliated at the Department of Philosophy, Linguistics and Theory of Science, University of Gothenburg.}
+
 
 Depending on the context, the English pronoun \textit{it} can express anaphoric
 reference with a nominal entity antecedent or with a
@@ -71,11 +80,11 @@ very differently and are therefore difficult to normalize.
 \item\label{ex:nominal} \textsc{Entity reading}
 
 This year we celebrate the 10th anniversary of the euro and on 1 January 2009
-Slovakia became the 16th member of the euro area. My country has surrendered a
+Slovakia became the 16th member of the euro area. \textbf{My country} has surrendered a
 part of its identity, but \textbf{it} has done so with pride.
 
 \textit{Cette année, nous célébrons le 10e anniversaire de l'euro et, le 1er janvier
-2009, la Slovaquie est devenue le 16e membre de la zone euro. Mon pays a
+2009, la Slovaquie est devenue le 16e membre de la zone euro. \textbf{Mon pays} a
 abandonné une partie de son identité, mais \textbf{il} l'a fait avec fierté}
 
 
