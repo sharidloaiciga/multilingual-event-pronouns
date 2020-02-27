@@ -3,6 +3,7 @@
 \usepackage{tabularx} \usepackage{soul}
 
 \usepackage{booktabs}
+
 % for eps graphics
 % 
 \usepackage{epstopdf} \usepackage[utf8]{inputenc}
@@ -15,13 +16,15 @@
 
 \newcommand{\secref}[1]{\StrSubstitute{\getrefnumber{#1}}{.}{ }}
 
-\title{Discovery of Events in the Europarl Languages}
+\title{Exploiting Cross-Lingual Hints to Discover Event Pronouns}
 
-\name{Author1, Author2, Author3}
+\name{Sharid Loáiciga$^1$, Christian Hardmeier$^2$  \& Asad Sayeed$^3$}
 
-\address{Affiliation1, Affiliation2, Affiliation3 \\ Address1, Address2,
-Address3 \\ author1@xxx.yy, author2@zzz.edu, author3@hhh.com\\ \{author1,
-author5, author9\}@abc.org\\}
+\address{$^1$Department of Linguistics, University of Potsdam \\  
+$^2$ Department of Linguistics, Uppsala University \\
+$^3$ Department of Philosophy, Linguistics and Theory of Science, University of
+Gothenburg  \\ 
+sharid.loaiciga@gmail.com, christian.hardmeier@lingfil.uu.se, asad.sayeed@gu.se}
 
 
 \abstract{ Non-nominal co-reference is much less studied than nominal
@@ -39,7 +42,9 @@ means of cheap supervision for the task of it-disambiguation. We found that only
 Depending on the context, the English pronoun \textit{it} can express anaphoric
 reference with a nominal entity antecedent or with a
 non-nominal antecedent such as an event. It can also be used
-pleonastically. The examples \ref{ex:nominal} to \ref{ex:pleo} below illustrate these different readings. Nominal coreference has been studied
+pleonastically. The examples \ref{ex:nominal} to \ref{ex:pleo} below illustrate
+these different readings using English passages from the Europarl corpus and
+their French parallel translations. Nominal coreference has been studied
 extensively, but work on the automatic recognition of non-nominal anaphora is
 scarce, as are annotated data sets.
 
@@ -65,28 +70,57 @@ very differently and are therefore difficult to normalize.
 
 \item\label{ex:nominal} \textsc{Entity reading}
 
-The infectious disease that's killed more humans than any other is
-\textbf{malaria}.  \textbf{It}'s carried in the bites of infected mosquitos.
+This year we celebrate the 10th anniversary of the euro and on 1 January 2009
+Slovakia became the 16th member of the euro area. My country has surrendered a
+part of its identity, but \textbf{it} has done so with pride.
 
-\textit{Jene Krankheit, die mehr Leute als jede andere umgebracht hat, ist
-Malaria gewesen. \textbf{Sie} wird über die Stiche von infizierten Moskitos
-übertragen.}
+\textit{Cette année, nous célébrons le 10e anniversaire de l'euro et, le 1er janvier
+2009, la Slovaquie est devenue le 16e membre de la zone euro. Mon pays a
+abandonné une partie de son identité, mais \textbf{il} l'a fait avec fierté}
+
+
+%The infectious disease that's killed more humans than any other is
+%\textbf{malaria}.  \textbf{It}'s carried in the bites of infected mosquitos.
+
+%\textit{Jene Krankheit, die mehr Leute als jede andere umgebracht hat, ist
+%Malaria gewesen. \textbf{Sie} wird über die Stiche von infizierten Moskitos
+%übertragen.}
 
 \item\label{ex:event}\textsc{Event reading}
 
-But I think \textbf{if we lost everyone with Down syndrome},  \textbf{it} would
-be a catastrophic loss.
+The European Parliament has always taken a vigorous stance against racism and
+ethnic intolerance. I appeal to you, as Members of this House, to do
+\textbf{it} once again and support our written declaration condemning Turkish racism against Bulgarians.
 
-\textit{Aber, wenn wir alle Menschen mit Down-Syndrom verlören, wäre
-\textbf{das}    ein katastrophaler Verlust.}
+\textit{Le Parlement européen a toujours pris des positions véhémentes contre le racisme
+et l'intolérance ethnique. Je fais appel à vous, en tant que membres de cette
+Assemblée, pour que vous \textbf{le} fassiez à nouveau, et que vous souteniez notre
+déclaration écrite condamnant le racisme turc à l'égard des Bulgares.} 
+
+%But I think \textbf{if we lost everyone with Down syndrome},  \textbf{it} would
+%be a catastrophic loss.
+
+%\textit{Aber, wenn wir alle Menschen mit Down-Syndrom verlören, wäre
+%\textbf{das}    ein katastrophaler Verlust.}
 
 \item\label{ex:pleo} \textsc{Pleonastic reading}
 
-And  \textbf{it} seemed to me that there were three levels of acceptance that
-needed to take place.
+Since the beginning of October 2008 I have been trying to get speaking time in
+the one -minute contributions and I am pleased that I have finally succeeded.
+\textbf{It} is interesting that Mr Rogalski has been allowed to speak three times in the meantime. 
 
-\textit{Und \textbf{es} schien, dass es drei Stufen der Akzeptanz gibt, die alle
-zum Tragen kommen mussten.}
+
+\textit{Depuis le début d'octobre 2008, j'ai essayé d'obtenir un temps de parole
+dans le cadre des interventions d'une minute et je suis heureux d'avoir
+finalement réussi. \textbf{Il} est intéressant que M. Rogalski ait été autorisé à prendre la parole trois fois dans l'intervalle.}
+
+
+
+%And  \textbf{it} seemed to me that there were three levels of acceptance that
+%needed to take place.
+
+%\textit{Und \textbf{es} schien, dass es drei Stufen der Akzeptanz gibt, die alle
+%zum Tragen kommen mussten.}
 
 \end{enumerate}
 
