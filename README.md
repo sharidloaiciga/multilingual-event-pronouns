@@ -31,16 +31,19 @@ This is how to extract the training data
 
 `./generate-align-data.py parse_dir overlap_files_dir alignment_dir source_language target_language  > out-file`
 
+`parse_dir` is the directory with the parsed data as extracted from OPUS  
+`overlap_files_dir` is the directory with the bitext correspondences as extracted in step 1  
+`alignment_dir` is the directory with the word-alignment files. We used bidirectional alignments, each stored individualy, for example `en-de/model/aligned.grow-diag-final-and`  
+`source_language` iso code for the source language  
+`target_language` iso code for the target language  
+
 example::
 
 ./generate-align-data.py ~/data/mt/v8/parsed/Europarl/parsed ~/data/mt/v8/fromOpus ~/data/mt/v8/smt/Europarl/smt en pt  >  enpt 
 
-3. 
 
-Some additional data:
----
 
-Besides the automatically generated data, we also include a manually annotated sample of 600 instances.
+
 
 
 
