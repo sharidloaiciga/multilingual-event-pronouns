@@ -88,6 +88,10 @@ def get_integer_mapping(le):
 
 def main():
 
+    if len(sys.argv) != 2:
+        sys.stderr.write("Usage: {} {} \n".format(sys.argv[0], "training_data_dir"))
+        sys.exit(1)
+
     # directory containing data
     data_dir = sys.argv[1]
 
