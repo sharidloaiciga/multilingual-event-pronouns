@@ -22,32 +22,16 @@ import sys
 def get_num_examples(dir_name):
 
     languages = os.listdir(dir_name)
-    classes = languages[1][:-2] + "fr"
-    n_examples = 0
-    noUNKs = 0
-    with open(dir_name + "/" + classes, "r", encoding="utf-8") as f:
-        for line in f:
-            n_examples += 1
-            cols =  line.strip("\n").split("\t")
-            label = cols[4].replace(" ", "")
-            if label != "unknown_ref":
-                noUNKs += 1
-    f.close()
+    classes_file = languages[1][:-2] + "fr"
+    num_lines = sum(1 for line in open(classes_file, "r", encoding="utf-8"))
 
-    print("total examples w UNK_ref:", n_examples)
-    print("total examples w/o UNK_ref:", noUNKs)
-    return n_examples, noUNKs
+    print("number of examples:", num_lines)
+    return num_lines
 
-
-def import_data(dir_name, UNK):
+def import_data(dir_name):
 
     languages = os.listdir(dir_name)
-    total_examples, noUNK_examples = get_num_examples(dir_name)
-    
-    if UNK == True:
-        n_examples = total_examples
-    else:
-        n_examples = noUNK_examples
+    n_examples = get_num_examples(dir_name)
 
     features = np.chararray((n_examples, len(languages)), itemsize=12) # itemsize = wordsize
     Ys = []
@@ -64,16 +48,8 @@ def import_data(dir_name, UNK):
 
                 if lang == "fr":
                     classification = cols[4].replace(" ", "")
-                    if UNK:
-                        Ys.append(classification)
-                    else:
-                        if classification == "unknown_ref":
-                            continue
-                        else:
-                            Ys.append(classification)
-                    else:
-                        Ys.append(classification)
-                    
+                    Ys.append(classification)
+
                 else:
                     #      0                 1    2      3
                     # ep-09-01-12-012.xml 	 3 	 11.5 	 ganz
