@@ -102,7 +102,7 @@ def main():
 
     # import data
     x, y = import_data(data_dir)
-    # x, y = import_manual_data(data_dir, n_examples)
+    # x, y = import_manual_data(data_dir)
 
     # encode and transform training data
     f_enc = preprocessing.OneHotEncoder(handle_unknown="ignore")

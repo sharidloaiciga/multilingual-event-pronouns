@@ -10,75 +10,90 @@ import re
 import os
 import numpy as np
 
-
-
-def import_manual_data(dir_name, n_examples):
-
-    languages = ["600_man_classes", "600_es", "600_et", "600_fi", "600_fr", "600_hu", "600_it", "600_lv", "600_man_classes", "600_nl",
-                 "600_pl", "600_pt", "600_ro", "600_sk", "600_sl", "600_sv"]
-
-    # ["600_es", "600_et", "600_fi", "600_fr", "600_hu", "600_it", "600_lv", "600_man_classes", "600_nl",
-    # "600_pl", "600_pt", "600_ro", "600_sk", "600_sl", "600_sv"]
-
-    features = np.chararray((n_examples, len(languages)), itemsize=10) # itemsize = wordsize
-    Ys = []
-    for i in range(len(languages)):
-        lang = languages[i]
-        row = 0
-        with open(dir_name + "/" + lang, "r", encoding="utf-8") as f:
-            for line in f:
-                #   0
-                # alors
-                if lang == "600_man_classes":
-                    classification = line.strip("\n").replace(" ", "")
-                    Ys.append(classification)
-                else:
-                    trans = line.strip("\n").replace(" ", "")
-                    features[row, i] = trans.encode('utf-8')
-                    row += 1
-
-    features_list = features.tolist()
-    return features, Ys
-
-
-
-def import_auto_data(dir_name, n_examples):
+def get_num_examples(dir_name):
 
     languages = os.listdir(dir_name)
+    classes_file = languages[1][:-2] + "fr"
+    num_lines = sum(1 for line in open(dir_name + "/" + classes_file, "r", encoding="utf-8"))
+    print("number of examples:", num_lines)
+    return num_lines
 
-    features = np.chararray((n_examples, len(languages)), itemsize=10) # itemsize = wordsize
+
+def import_data(dir_name):
+
+    languages = os.listdir(dir_name)
+    n_examples = get_num_examples(dir_name)
+    features = np.chararray((n_examples, len(languages)), itemsize=12) # itemsize = wordsize
     Ys = []
+
     for i in range(len(languages)):
-        lang = languages[i]
-        row = 0
-        with open(dir_name + "/" + lang, "r", encoding="utf-8") as f:
+        lang = languages[i][-2:]
+        with open(dir_name + "/" + languages[i], "r", encoding="utf-8") as f:
+            row = 0
             for line in f:
-                #         0               1        2      3         4              5
-                # ep-09-01-12-012.xml 	 18 	 46.1 	 it 	 unknown_ref 	 alors
                 cols = line.strip("\n").split("\t")
-                if "en_fr" in lang:
+                if lang == "fr":
+                    #      0                 1    2      3            4           5
+                    # ep-09-01-12-012.xml 	 3 	 11.5 	 it 	 unknown_ref 	 empty
                     classification = cols[4].replace(" ", "")
                     Ys.append(classification)
                 else:
-                    trans = cols[-1].replace(" ", "") # different column if I use noUNK !!!
+                    #      0                 1    2      3
+                    # ep-09-01-12-012.xml 	 3 	 11.5 	 ganz
+                    trans = cols[-1].replace(" ", "")
                     features[row, i] = trans.encode('utf-8')
                 row += 1
-    features_list = features.tolist()
-    return features_list, Ys
+    return features, Ys
 
+
+def import_manual_data(dir_name):
+
+    languages = os.listdir(dir_name)
+    n_examples = get_num_examples(dir_name)
+    features = np.chararray((n_examples, len(languages)), itemsize=12) # itemsize = wordsize
+    Ys = []
+    for i in range(len(languages)):
+        lang = languages[i][-2:]
+        row = 0
+        with open(dir_name + "/" + languages[i], "r", encoding="utf-8") as f:
+            for line in f:
+                cols = line.strip("\n").split("\t")
+                if lang == "fr":
+                    #      0                 1    2      3            4           5
+                    # ep-09-01-12-012.xml 	 3 	 11.5 	 it 	 unknown_ref 	 empty
+                    classification = cols[-1].replace(" ", "")
+                    Ys.append(classification)
+                else:
+                    #      0                 1    2      3
+                    # ep-09-01-12-012.xml 	 3 	 11.5 	 ganz
+                    trans = cols[-1].replace(" ", "")
+                    features[row, i] = trans.encode('utf-8')
+                row += 1
+    return features, Ys
+
+
+def get_integer_mapping(le):
+    '''
+    Return a dict mapping labels to their integer values
+    from an sklearn LabelEncoder
+    le = a fitted sklearn LabelEncoder
+    '''
+    res = {}
+    for cl in le.classes_:
+        res.update({cl:le.transform([cl])[0]})
+    return res
 
 def main():
 
-    # data_dir = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/multilingual/noUNK"
-    data_dir = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
-               "multilingual_improved_align/noUNK"
+    if len(sys.argv) != 2:
+        sys.stderr.write("Usage: {} {} \n".format(sys.argv[0], "training_data_dir"))
+        sys.exit(1)
 
-    # n_examples = 69431  # multilingual with unknown_ref class f
-    # n_examples = 17534 # multilingual all without unknown_ref class
-    n_examples = 22736 # multilingual_improved_aling without unknown_ref
+    # directory containing data
+    data_dir = sys.argv[1]
 
     #x, y = import_manual_data(data_dir, n_examples)
-    x, y = import_auto_data(data_dir, n_examples)
+    x, y = import_data(data_dir)
 
 
     # encode and transform traing data
