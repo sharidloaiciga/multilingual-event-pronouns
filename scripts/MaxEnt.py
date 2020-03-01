@@ -29,7 +29,7 @@ def get_num_examples(dir_name):
         for line in f:
             n_examples += 1
             cols =  line.strip("\n").split("\t")
-            label = cols[4]
+            label = cols[4].replace(" ", "")
             if label != "unknown_ref":
                 noUNKs += 1
     f.close()
@@ -43,8 +43,8 @@ def import_data(dir_name, UNK):
 
     languages = os.listdir(dir_name)
     total_examples, noUNK_examples = get_num_examples(dir_name)
-
-    if UNK == "yes":
+    
+    if UNK == True:
         n_examples = total_examples
     else:
         n_examples = noUNK_examples
@@ -64,7 +64,16 @@ def import_data(dir_name, UNK):
 
                 if lang == "fr":
                     classification = cols[4].replace(" ", "")
-                    Ys.append(classification)
+                    if UNK:
+                        Ys.append(classification)
+                    else:
+                        if classification == "unknown_ref":
+                            continue
+                        else:
+                            Ys.append(classification)
+                    else:
+                        Ys.append(classification)
+                    
                 else:
                     #      0                 1    2      3
                     # ep-09-01-12-012.xml 	 3 	 11.5 	 ganz
