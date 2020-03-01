@@ -42,7 +42,7 @@ def get_num_examples(dir_name):
 def import_data(dir_name, UNK):
 
     languages = os.listdir(dir_name)
-    total_examples, noUNK_examples = get_num_examples(data_dir)
+    total_examples, noUNK_examples = get_num_examples(dir_name)
 
     if UNK == "yes":
         n_examples = total_examples
