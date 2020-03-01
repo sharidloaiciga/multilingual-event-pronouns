@@ -9,47 +9,45 @@ from sklearn.linear_model import LogisticRegression
 
 from imblearn.under_sampling import ClusterCentroids
 from imblearn.over_sampling import RandomOverSampler
-from sklearn.feature_selection import VarianceThreshold
-from sklearn.feature_selection import SelectKBest
-from sklearn.feature_selection import chi2
-from sklearn.feature_selection import mutual_info_classif
 
 
-from collections import Counter
+
 import re
 import os
 import numpy as np
+import sys
 
 
-def import_data(dir_name, n_examples, unseen=False):
+def import_data(dir_name):
 
     languages = os.listdir(dir_name)
 
-    features = np.chararray((n_examples, len(languages)), itemsize=10) # itemsize = wordsize
+    n_examples = sum(1 for line in open(dir_name + "/" + languages[1], "r", encoding="utf-8"))
+
+    features = np.chararray((n_examples, len(languages)), itemsize=12) # itemsize = wordsize
     Ys = []
+
     for i in range(len(languages)):
-        lang = languages[i]
+        lang = languages[i][-2:]
         row = 0
-        with open(dir_name + "/" + lang, "r", encoding="utf-8") as f:
+
+        with open(dir_name + "/" + languages[i], "r", encoding="utf-8") as f:
             for line in f:
-                #         0               1        2      3         4              5
-                # ep-09-01-12-012.xml 	 18 	 46.1 	 it 	 unknown_ref 	 alors
+                #      0                 1    2      3            4           5
+                # ep-09-01-12-012.xml 	 3 	 11.5 	 it 	 unknown_ref 	 empty
                 cols = line.strip("\n").split("\t")
-                if ("en_fr" in lang) and unseen:
-                    classification = cols[-1].replace(" ", "")
-                    Ys.append(classification)
-                elif ("en_fr" in lang) and not unseen:
+
+                if lang == "fr":
                     classification = cols[4].replace(" ", "")
                     Ys.append(classification)
                 else:
-                    trans = cols[-1].replace(" ", "") # different column if I use noUNK !!!
+                    #      0                 1    2      3
+                    # ep-09-01-12-012.xml 	 3 	 11.5 	 ganz
+                    trans = cols[-1].replace(" ", "")
                     features[row, i] = trans.encode('utf-8')
                 row += 1
-    #features_list = features.tolist()
-    #return features_list, Ys
+
     return features, Ys
-
-
 
 def import_manual_data(dir_name, n_examples):
 
@@ -76,14 +74,11 @@ def import_manual_data(dir_name, n_examples):
     return features_list, Ys
 
 
-
-
-
 def get_integer_mapping(le):
     '''
     Return a dict mapping labels to their integer values
-    from an SKlearn LabelEncoder
-    le = a fitted SKlearn LabelEncoder
+    from an sklearn LabelEncoder
+    le = a fitted sklearn LabelEncoder
     '''
     res = {}
     for cl in le.classes_:
@@ -93,25 +88,14 @@ def get_integer_mapping(le):
 
 def main():
 
-    # data_dir = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/multilingual/noUNK"
-    # data_dir = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
-    #           "multilingual_improved_align/noUNK_noGOLD"
-    data_dir = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
-               "multilingual_improved_align/"
+    # directory containing data
+    data_dir = sys.argv[1]
 
-    # n_examples = 69431  # multilingual with unknown_ref class
-    # n_examples = 17534 # multilingual all without unknown_ref class
-    # n_examples = 22736 # multilingual_improved_aling without unknown_ref
-
-    # n_examples = 22554 # multilingual_improved_aling noUNKnoGOLD
-
-    n_examples = 600  # manual annotation
-
-    # x, y = import_data(data_dir, n_examples, unseen=False)
-    x, y = import_manual_data(data_dir, n_examples)
+    # import data
+    x, y = import_data(data_dir)
+    # x, y = import_manual_data(data_dir, n_examples)
 
     # encode and transform training data
-
     f_enc = preprocessing.OneHotEncoder(handle_unknown="ignore")
     f_enc.fit(x)
     features = f_enc.transform(x)
@@ -120,20 +104,19 @@ def main():
     l_enc.fit(y)
     labels = l_enc.transform(y)
 
-
     # transform new test data
-    unseen_data = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
+    # unseen_data = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
                   "multilingual_improved_align/"
-    auto_and_man = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
+    # auto_and_man = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
                   "multilingual_improved_align/onlyGOLD_fromAUTOMATIC"
 
     # x_unseen_test, y_unseen_test = import_manual_data(unseen_data, 600)
-    x_unseen_test, y_unseen_test = import_data(auto_and_man, 182, unseen=False)
+    # x_unseen_test, y_unseen_test = import_data(auto_and_man, 182, unseen=False)
 
     # print(len(x_unseen_test), len(y_unseen_test))
 
-    unseen_feats = f_enc.transform(x_unseen_test)
-    unseen_labels = l_enc.transform(y_unseen_test)
+    # unseen_feats = f_enc.transform(x_unseen_test)
+    # unseen_labels = l_enc.transform(y_unseen_test)
 
     # undersampling
     # cc = ClusterCentroids(random_state=0)
@@ -170,9 +153,7 @@ def main():
     clf = LogisticRegression(random_state=0, solver='newton-cg', multi_class='multinomial', max_iter=1000)
     clf = clf.fit(X_train, y_train)
 
-
-
-    # # test
+    # test
 
     #print(sorted(Counter(y_resampled).items()))
     #
