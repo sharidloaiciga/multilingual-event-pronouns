@@ -10,8 +10,6 @@ from sklearn.linear_model import LogisticRegression
 from imblearn.under_sampling import ClusterCentroids
 from imblearn.over_sampling import RandomOverSampler
 
-
-
 import re
 import os
 import numpy as np
@@ -24,32 +22,28 @@ def get_num_examples(dir_name):
     languages = os.listdir(dir_name)
     classes_file = languages[1][:-2] + "fr"
     num_lines = sum(1 for line in open(classes_file, "r", encoding="utf-8"))
-
     print("number of examples:", num_lines)
     return num_lines
+
 
 def import_data(dir_name):
 
     languages = os.listdir(dir_name)
     n_examples = get_num_examples(dir_name)
-
     features = np.chararray((n_examples, len(languages)), itemsize=12) # itemsize = wordsize
     Ys = []
 
     for i in range(len(languages)):
         lang = languages[i][-2:]
-        row = 0
-
         with open(dir_name + "/" + languages[i], "r", encoding="utf-8") as f:
+            row = 0
             for line in f:
-                #      0                 1    2      3            4           5
-                # ep-09-01-12-012.xml 	 3 	 11.5 	 it 	 unknown_ref 	 empty
                 cols = line.strip("\n").split("\t")
-
                 if lang == "fr":
+                    #      0                 1    2      3            4           5
+                    # ep-09-01-12-012.xml 	 3 	 11.5 	 it 	 unknown_ref 	 empty
                     classification = cols[4].replace(" ", "")
                     Ys.append(classification)
-
                 else:
                     #      0                 1    2      3
                     # ep-09-01-12-012.xml 	 3 	 11.5 	 ganz
@@ -62,20 +56,18 @@ def import_data(dir_name):
 def import_manual_data(dir_name):
 
     languages = os.listdir(dir_name)
-    n_examples = sum(1 for line in open(dir_name + "/" + languages[1], "r", encoding="utf-8"))
+    n_examples = get_num_examples(dir_name)
     features = np.chararray((n_examples, len(languages)), itemsize=12) # itemsize = wordsize
     Ys = []
     for i in range(len(languages)):
         lang = languages[i][-2:]
         row = 0
-
         with open(dir_name + "/" + languages[i], "r", encoding="utf-8") as f:
             for line in f:
-                #      0                 1    2      3            4           5        6
-                # ep-09-01-12-012.xml 	 3 	 11.5 	 it 	 unknown_ref 	 empty     nominal_ref
                 cols = line.strip("\n").split("\t")
-
                 if lang == "fr":
+                    #      0                 1    2      3            4           5
+                    # ep-09-01-12-012.xml 	 3 	 11.5 	 it 	 unknown_ref 	 empty
                     classification = cols[-1].replace(" ", "")
                     Ys.append(classification)
                 else:
@@ -85,7 +77,6 @@ def import_manual_data(dir_name):
                     features[row, i] = trans.encode('utf-8')
                 row += 1
     return features, Ys
-
 
 
 def get_integer_mapping(le):
@@ -110,7 +101,7 @@ def main():
     data_dir = sys.argv[1]
 
     # import data
-    x, y = import_data(data_dir, UNK="no")
+    x, y = import_data(data_dir)
     # x, y = import_manual_data(data_dir, n_examples)
 
     # encode and transform training data
@@ -148,11 +139,11 @@ def main():
 
     # spliting
 
-    X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3,shuffle=True,random_state=109)
+    # X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3,shuffle=True,random_state=109)
 
     # X_new = SelectKBest(mutual_info_classif).fit_transform(features, labels)
 
-    # X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3,shuffle=True,random_state=109)
+    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3,shuffle=True,random_state=109)
 
     #print("X before split")
 
