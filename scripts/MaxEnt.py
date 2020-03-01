@@ -21,7 +21,7 @@ def get_num_examples(dir_name):
 
     languages = os.listdir(dir_name)
     classes_file = languages[1][:-2] + "fr"
-    num_lines = sum(1 for line in open(classes_file, "r", encoding="utf-8"))
+    num_lines = sum(1 for line in open(dir_name + "/" + classes_file, "r", encoding="utf-8"))
     print("number of examples:", num_lines)
     return num_lines
 
