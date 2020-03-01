@@ -18,11 +18,36 @@ import numpy as np
 import sys
 
 
-def import_data(dir_name):
+
+def get_num_examples(dir_name):
 
     languages = os.listdir(dir_name)
+    classes = languages[1][:-2] + "fr"
+    n_examples = 0
+    noUNKs = 0
+    with open(dir_name + "/" + classes, "r", encoding="utf-8") as f:
+        for line in f:
+            n_examples += 1
+            cols =  line.strip("\n").split("\t")
+            label = cols[4]
+            if label != "unknown_ref":
+                noUNKs += 1
+    f.close()
 
-    n_examples = sum(1 for line in open(dir_name + "/" + languages[1], "r", encoding="utf-8"))
+    print("total examples w UNK_ref:", n_examples)
+    print("total examples w/o UNK_ref:", noUNKs)
+    return n_examples, noUNKs
+
+
+def import_data(dir_name, UNK):
+
+    languages = os.listdir(dir_name)
+    total_examples, noUNK_examples = get_num_examples(data_dir)
+
+    if UNK == "yes":
+        n_examples = total_examples
+    else:
+        n_examples = noUNK_examples
 
     features = np.chararray((n_examples, len(languages)), itemsize=12) # itemsize = wordsize
     Ys = []
@@ -46,32 +71,36 @@ def import_data(dir_name):
                     trans = cols[-1].replace(" ", "")
                     features[row, i] = trans.encode('utf-8')
                 row += 1
-
     return features, Ys
 
-def import_manual_data(dir_name, n_examples):
 
-    languages = ["600_es", "600_et", "600_fi", "600_hu", "600_it", "600_lv", "600_man_classes", "600_nl",
-                 "600_pl", "600_pt", "600_ro", "600_sk", "600_sl", "600_sv"]
+def import_manual_data(dir_name):
 
-    features = np.chararray((n_examples, len(languages)), itemsize=10) # itemsize = wordsize
+    languages = os.listdir(dir_name)
+    n_examples = sum(1 for line in open(dir_name + "/" + languages[1], "r", encoding="utf-8"))
+    features = np.chararray((n_examples, len(languages)), itemsize=12) # itemsize = wordsize
     Ys = []
     for i in range(len(languages)):
-        lang = languages[i]
+        lang = languages[i][-2:]
         row = 0
-        with open(dir_name + "/" + lang, "r", encoding="utf-8") as f:
-            for line in f:
 
-                if lang == "600_man_classes":
-                    classification = line.strip("\n").replace(" ", "")
+        with open(dir_name + "/" + languages[i], "r", encoding="utf-8") as f:
+            for line in f:
+                #      0                 1    2      3            4           5        6
+                # ep-09-01-12-012.xml 	 3 	 11.5 	 it 	 unknown_ref 	 empty     nominal_ref
+                cols = line.strip("\n").split("\t")
+
+                if lang == "fr":
+                    classification = cols[-1].replace(" ", "")
                     Ys.append(classification)
                 else:
-                    trans = line.strip("\n").replace(" ", "")
+                    #      0                 1    2      3
+                    # ep-09-01-12-012.xml 	 3 	 11.5 	 ganz
+                    trans = cols[-1].replace(" ", "")
                     features[row, i] = trans.encode('utf-8')
-                    row += 1
+                row += 1
+    return features, Ys
 
-    features_list = features.tolist()
-    return features_list, Ys
 
 
 def get_integer_mapping(le):
@@ -96,7 +125,7 @@ def main():
     data_dir = sys.argv[1]
 
     # import data
-    x, y = import_data(data_dir)
+    x, y = import_data(data_dir, UNK="no")
     # x, y = import_manual_data(data_dir, n_examples)
 
     # encode and transform training data
@@ -110,9 +139,9 @@ def main():
 
     # transform new test data
     # unseen_data = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
-                  "multilingual_improved_align/"
+    #              "multilingual_improved_align/"
     # auto_and_man = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
-                  "multilingual_improved_align/onlyGOLD_fromAUTOMATIC"
+    #              "multilingual_improved_align/onlyGOLD_fromAUTOMATIC"
 
     # x_unseen_test, y_unseen_test = import_manual_data(unseen_data, 600)
     # x_unseen_test, y_unseen_test = import_data(auto_and_man, 182, unseen=False)
