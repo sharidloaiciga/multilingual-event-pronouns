@@ -23,7 +23,7 @@ def get_num_examples(dir_name):
     languages = os.listdir(dir_name)
     classes_file = languages[1][:-2] + "fr"
     num_lines = sum(1 for line in open(dir_name + "/" + classes_file, "r", encoding="utf-8"))
-    print("number of examples:", num_lines)
+    print("number of examples in:", dir_name, num_lines)
     return num_lines
 
 
@@ -127,26 +127,25 @@ def main():
     # cc = ClusterCentroids(random_state=0)
     # X_resampled, y_resampled = cc.fit_resample(features, labels)
 
-    # oversampling
-    ros = RandomOverSampler(random_state=0)
-    X_resampled, y_resampled = ros.fit_resample(features, labels)
-
-    print("resampled items:", sorted(Counter(y_resampled).items()))
 
     # spliting
+
+    # use with resampling
+
+    # oversampling
+    # ros = RandomOverSampler(random_state=0)
+    # X_resampled, y_resampled = ros.fit_resample(features, labels)
+
     # X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3,shuffle=True,random_state=109)
+    # print("resampled items:", sorted(Counter(y_resampled).items()))
+
     # X_new = SelectKBest(mutual_info_classif).fit_transform(features, labels)
 
+    # no resampling
     X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3,shuffle=True,random_state=109)
 
-    #print("X before split")
-
-    #print("X_train after split")
-    #print(X_train)
-
-    #print("X_train after selection")
-    #print(X_new)
-
+    print("splitted train items:", sorted(Counter(X_train).items()))
+    print("splitted test items:", sorted(Counter(X_test).items()))
 
     # train
 
