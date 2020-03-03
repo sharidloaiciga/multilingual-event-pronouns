@@ -173,8 +173,6 @@ def main():
     unseen_feats = f_enc.transform(x_manual)
     unseen_labels = l_enc.transform(y_manual)
 
-    print("length manual test", len(unseen_feats), len(unseen_labels))
-
     # undersampling
     # cc = ClusterCentroids(random_state=0)
     # X_resampled, y_resampled = cc.fit_resample(features, labels)
