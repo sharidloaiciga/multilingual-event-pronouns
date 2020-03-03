@@ -144,8 +144,8 @@ def main():
     # no resampling
     X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3,shuffle=True,random_state=109)
 
-    print("splitted train items:", sorted(Counter(X_train).items()))
-    print("splitted test items:", sorted(Counter(X_test).items()))
+    print("splitted train items:", sorted(Counter(y_train).items()))
+    print("splitted test items:", sorted(Counter(y_test).items()))
 
     # train
 
