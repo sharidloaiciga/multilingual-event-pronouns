@@ -6,6 +6,7 @@ from sklearn.metrics import classification_report
 from sklearn.tree.export import export_text
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+from collections import Counter
 
 from imblearn.under_sampling import ClusterCentroids
 from imblearn.over_sampling import RandomOverSampler
@@ -93,12 +94,13 @@ def get_integer_mapping(le):
 
 def main():
 
-    if len(sys.argv) != 2:
-        sys.stderr.write("Usage: {} {} \n".format(sys.argv[0], "training_data_dir"))
+    if len(sys.argv) != 3:
+        sys.stderr.write("Usage: {} {} {} \n".format(sys.argv[0], "training_data_dir", "test_dir"))
         sys.exit(1)
 
     # directory containing data
     data_dir = sys.argv[1]
+    test_dir = sys.argv[2]
 
     # import data
     x, y = import_data(data_dir)
@@ -114,18 +116,12 @@ def main():
     labels = l_enc.transform(y)
 
     # transform new test data
-    # unseen_data = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
-    #              "multilingual_improved_align/"
-    # auto_and_man = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
-    #              "multilingual_improved_align/onlyGOLD_fromAUTOMATIC"
+    x_manual, y_manual = import_manual_data(test_dir)
 
-    # x_unseen_test, y_unseen_test = import_manual_data(unseen_data, 600)
-    # x_unseen_test, y_unseen_test = import_data(auto_and_man, 182, unseen=False)
+    # print(len(x_manual), len(y_manual))
 
-    # print(len(x_unseen_test), len(y_unseen_test))
-
-    # unseen_feats = f_enc.transform(x_unseen_test)
-    # unseen_labels = l_enc.transform(y_unseen_test)
+    unseen_feats = f_enc.transform(x_manual)
+    unseen_labels = l_enc.transform(y_manual)
 
     # undersampling
     # cc = ClusterCentroids(random_state=0)
@@ -135,22 +131,18 @@ def main():
     ros = RandomOverSampler(random_state=0)
     X_resampled, y_resampled = ros.fit_resample(features, labels)
 
-    # print(sorted(Counter(y_resampled).items()))
+    print("resampled items:", sorted(Counter(y_resampled).items()))
 
     # spliting
-
     # X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3,shuffle=True,random_state=109)
-
     # X_new = SelectKBest(mutual_info_classif).fit_transform(features, labels)
 
     X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3,shuffle=True,random_state=109)
 
     #print("X before split")
 
-
     #print("X_train after split")
     #print(X_train)
-
 
     #print("X_train after selection")
     #print(X_new)
@@ -163,16 +155,14 @@ def main():
     clf = clf.fit(X_train, y_train)
 
     # test
+    # print(sorted(Counter(y_resampled).items()))
+    # test on either X_test/y_test or unseen_feats/unseen_labels
 
-    #print(sorted(Counter(y_resampled).items()))
-    #
-    prediction = clf.predict(X_test)
-    gold = y_test
+    pred_automatic = clf.predict(X_test)
+    gold_automatic = y_test
 
-    # test_new = SelectKBest(mutual_info_classif).fit_transform(unseen_feats, unseen_labels)
-    # prediction = clf.predict(unseen_feats)
-    # prediction = clf.predict(test_new)
-    # gold = unseen_labels
+    pred_manual = clf.predict(unseen_feats)
+    gold_manual = unseen_labels
 
 
     print("label categories ==>")
@@ -182,13 +172,15 @@ def main():
     print("nominal:", mapping["nominal_ref"])
     print("pleo:", mapping["pleonastic_ref"])
 
-    print("prediction ==> ", prediction)
-    print("gold ===>", gold)
-    print(classification_report(gold, prediction))
+    print("**results test on automatic annotation**")
+    print("prediction ==> ", pred_automatic)
+    print("gold ===>", gold_automatic)
+    print(classification_report(gold_automatic, pred_automatic))
 
-
-
-
+    print("**results test on manual annotation**")
+    print("prediction ==> ", pred_manual)
+    print("gold ===>", gold_manual)
+    print(classification_report(gold_manual, pred_manual))
 
 
 
