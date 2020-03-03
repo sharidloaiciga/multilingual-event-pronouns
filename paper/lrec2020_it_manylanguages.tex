@@ -45,7 +45,8 @@ means of cheap supervision for the task of it-disambiguation. We found that only
 
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
-\footnotetext[1]{Work completed while the first author was affiliated at the Department of Philosophy, Linguistics and Theory of Science, University of Gothenburg.}
+\footnotetext[1]{Work completed while the first author was affiliated at the
+Department of Philosophy, Linguistics and Theory of Science, University of Gothenburg.}
 
 
 Depending on the context, the English pronoun \textit{it} can express anaphoric
@@ -220,8 +221,8 @@ Taking advantage of the parallel data, we decided to use French as a seed langua
 consider all instances translated with the neutral demonstrative pronouns
 \textit{cela}, \textit{ceci} or \textit{ça} as events. In French, these pronoun
 are typically used to reference proposition or phrases. For the entity nominal
-case, we took the French translations \textit{elle} and \textit{il}. From 69,431
-`it' pronouns, we labeled 22,574 instances, corresponding to approximately 30\%
+case, we took the French translations \textit{elle} and \textit{il}. From 69,126
+`it' pronouns, we labeled 22,615 instances, corresponding to approximately 30\%
 (Tables \ref{tab:classrules} and \ref{tab:resultinglabels}).
 
 \item Last, translations from the other 14 languages than French are used as features for
@@ -249,11 +250,11 @@ classes. }\label{tab:classrules}
 \toprule 
 Entity & Event & Pleonastic \\
 \midrule 
-11,607 & 877 &10,252\\ 
+11,483 & 910 &10,222\\ 
 \bottomrule 
 \end{tabular} 
-\caption{Resulting
-distribution after automatic labeling.}\label{tab:resultinglabels} 
+\caption{Resulting distribution after automatic labeling. }
+\label{tab:resultinglabels} 
 \end{table}
 
 
@@ -263,17 +264,19 @@ distribution after automatic labeling.}\label{tab:resultinglabels}
 %\textbf{English} & \textbf{French} &  \textbf{Class} &&&&&&&&&&& \\ \midrule it
 %&  \textit{elle/il}  & entity  &&&&&&&&&&& \\ it & \textit{cela/ça/ceci} &
 %event  &&&&&&&&&&& \\ it  &  --  &&&&&&&&&&& \\ \midrule
-\multicolumn{14}{c}{\textbf{Features}}\\ \midrule DE & FI & SV & IT &LV& NL &
-HU&PL & SL & PT &  SK& RO& ET& ES  \\ &&&&&&&&&&&&&\\ \textit{dies}&\textit{on}&
-\textit{det}& \textit{e}& \textit{tas}& \textit{het}& \textit{hogy}&
-\textit{pre}& \textit{je}& empty& \textit{'}& empty& \textit{on}&
-\textit{desgracia} \\ &&&&&&&&&&&&&\\ 
- \textit{das}&\textit{puhua}& \textit{det}& \textit{-}& \textit{ir}&
- \textit{sprake}& \textit{lehetsége}& \textit{sa}& \textit{prav}& \textit{soar}&
- \textit{' }& \textit{în}& empty& \textit{puede} \\
- &&&&&&&&&&&&&\\ \textit{es} &\textit{ei}& empty& \textit{non}&
- \textit{nepietiks}& empty& \textit{nem}& empty& \textit{zgolj}& empty&
- \textit{'}& \textit{nu}& \textit{vaeste}& \textit{no}  \\ 
+\multicolumn{14}{c}{\textbf{Features}}\\ \midrule DE & ES & ET & FI &HU& IT &
+LV&NL & PL & PT &  RO& SK& SL& SV  \\ &&&&&&&&&&&&&\\ 
+
+\textit{empty}&\textit{idea}&\textit{seda}&\textit{empty}&\textit{képeznie}&\textit{essenza}&\textit{es}&\textit{dit}&\textit{dodać}&\textit{adaug}&\textit{že}&\textit{empty}&\textit{detta}\\
+
+\textit{du}&\textit{usted}&\textit{sa}&\textit{empty}&\textit{te}&\textit{l'}&\textit{empty}&\textit{u}&\textit{empty}&\textit{empty}&\textit{eşti}&\textit{ty}&\textit{empty}&\textit{du}\\
+
+\textit{empty}&\textit{señor}&\textit{ja}&\textit{empty}&\textit{.}&\textit{-}&\textit{empty}&\textit{ik}&\textit{cohn-bendit}&\textit{cohn-bendit}&\textit{îi}&\textit{a}&\textit{gospod}&\textit{sluta}\\
+
+\textit{empty}&\textit{que}&\textit{juhataja}&\textit{siirtämisestä}&\textit{úr}&\textit{presidente}&\textit{empty}&\textit{de}&\textit{!}&\textit{é}&\textit{,}&\textit{je}&\textit{predsednik}&\textit{det}\\
+
+\textit{empty}&\textit{es}&\textit{üksluine}&\textit{ne}&\textit{dolog}&\textit{in}&\textit{tas}&\textit{empty}&\textit{co}&\textit{empty}&\textit{ce}&\textit{spôsobom}&\textit{govoriti}&\textit{allt}\\
+									
  \bottomrule
  \end{tabular}} \caption{Exemplification of the extracted
  features.}\label{fig:featuresexample} 
@@ -295,9 +298,9 @@ translations different from the assumptions we made by using French as the seed 
 \begin{tabular}{ccccc} 
 \toprule 
 &Entity & Event &Pleonastic & Unknown \\ 
-\midrule Entity &   65  &  2   &   0     &  250  \\ 
-Event &    5  &  3   &  0  &  34\\ 
-Pleonastic& 41 & 1&  65&  134\\
+\midrule Entity &   56  &  5   &   0     &  259  \\ 
+Event &    5  &  6   &  0  &  23\\ 
+Pleonastic& 45 & 1&  71&  129\\
 \bottomrule 
 \end{tabular} \caption{Manual evaluation of a sample of 600
 instances.}\label{tab:manualsample600} 
@@ -329,7 +332,7 @@ In a first experiment, we use the generated data tor predict one of the three au
 \toprule
 \textbf{Train} & \textbf{Test} & \textbf{Total} \\
 \midrule
-15,787 & 6,767 & 22,554 \\
+15,698 & 6,728 & 22,426 \\
 \bottomrule
 \end{tabular}
 \caption{Data set split for the classification experiments. }
@@ -342,15 +345,18 @@ In a first experiment, we use the generated data tor predict one of the three au
 \multicolumn{4}{c}{ \textbf{Automatically annotated data}}\\ 
 \toprule
 \textbf{MaxEnt}& Precision & Recall & Accuracy \\ 
-\midrule \textit{it}-Entity &
-0.69 & 0.74 &   0.69\\ \textit{it}-Event & 0.48 & 0.14 & (4,669/6,767) \\
-\textit{it}-Pleonastic & 0.69 & 0.67&   \\ 
+\midrule 
+\textit{it}-Entity &0.70 & 0.75 &   0.70\\
+\textit{it}-Event & 0.44 & 0.15 & (4,710/6,728) \\
+\textit{it}-Pleonastic & 0.70 & 0.68&   \\ 
 \midrule & & & \\
 \multicolumn{4}{c}{\textbf{Manually annotated sample}}  \\ 
 \midrule
 \textbf{MaxEnt}& Precision & Recall & Accuracy \\ 
-\midrule Entity &0.53 & 0.99 &
-0.53\\ Event &0.0 & 0.0 & (318/600)\\ Pleonastic & 0.50 & 0.02 & \\ 
+\midrule 
+Entity &0.55 & 0.84 &0.54\\ 
+Event &0.0 & 0.0 & (318/600)\\ 
+Pleonastic & 0.50 & 0.22 & \\ 
 \bottomrule
 \end{tabular} \caption{Classification results using a Maximum Entropy
 classifier.} 
@@ -364,7 +370,7 @@ To address the problem of the uneven distribution of the classes, in a second ex
 \toprule
 \textbf{Event} & \textbf{Entity} & \textbf{Pleonastic} \\
 \midrule
-11,496 & 11,496 & 11,496 \\
+11,377 & 11,377 & 11,377 \\
 \bottomrule
 \end{tabular}
 \caption{Equal distribution of the classes for the experiment with oversampling.}
@@ -376,9 +382,10 @@ In this second scenario, we obtained a comparable performance for the `entity' a
 \multicolumn{4}{c}{\textbf{Oversampling of the event class}}\\ 
 \toprule
 \textbf{MaxEnt}& Precision & Recall & Accuracy \\ 
-\midrule Entity & 0.73 &0.68& 
-  0.80 \\ Event &0.91 & 1.0 & (8,277/10,347) \\ 
-  Pleonastic &  0.74 & 0.72 & \\
+\midrule 
+ Entity & 0.73 &0.67& 0.80 \\ 
+ Event & 0.92 & 0.99 & (8,277/10,347) \\ 
+  Pleonastic &  0.73 & 0.74 & \\
 \bottomrule 
 \end{tabular} 
 \caption{Classification results using bootstrap
