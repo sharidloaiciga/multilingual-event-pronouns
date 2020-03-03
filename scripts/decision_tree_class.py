@@ -92,10 +92,8 @@ def get_integer_mapping(le):
 
 def interpret(f_enc, clf):
 
-    #print("feature categories ==>")
-    #print(f_enc.categories_) # categories of features
-
-    print("****************")
+    print("feature categories ==>")
+    print(f_enc.categories_) # categories of features
 
     c = 0
     features_dict = {}
@@ -128,14 +126,15 @@ def interpret(f_enc, clf):
 
 def main():
 
-    if len(sys.argv) != 2:
-        sys.stderr.write("Usage: {} {} \n".format(sys.argv[0], "training_data_dir"))
+    if len(sys.argv) != 3:
+        sys.stderr.write("Usage: {} {} {} \n".format(sys.argv[0], "training_data_dir", "test_dir"))
         sys.exit(1)
 
     # directory containing data
     data_dir = sys.argv[1]
+    test_dir = sys.argv[2]
 
-    # x, y = import_manual_data(data_dir, n_examples)
+    # import data
     x, y = import_data(data_dir)
 
     print(len(x), len(y))
@@ -166,18 +165,14 @@ def main():
     labels = l_enc.transform(y)
 
     # transform new test data
-    unseen_data = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
-                  "multilingual_improved_align/"
-    auto_and_man = "/Users/xloish/PycharmProjects/abstract_coref/data_sharid/it-disamb/mt/2ndround/" \
-                  "multilingual_improved_align/onlyGOLD_fromAUTOMATIC"
+    x_manual, y_manual = import_manual_data(test_dir)
 
-    # x_unseen_test, y_unseen_test = import_manual_data(unseen_data, 600)
-    x_unseen_test, y_unseen_test = import_data(auto_and_man, 182, unseen=False)
+    # print(len(x_manual), len(y_manual))
 
-    print("length manual test", len(x_unseen_test), len(y_unseen_test))
+    unseen_feats = f_enc.transform(x_manual)
+    unseen_labels = l_enc.transform(y_manual)
 
-    unseen_feats = f_enc.transform(x_unseen_test)
-    unseen_labels = l_enc.transform(y_unseen_test)
+    print("length manual test", len(unseen_feats), len(unseen_labels))
 
     # undersampling
     # cc = ClusterCentroids(random_state=0)
@@ -191,14 +186,29 @@ def main():
 
     # spliting
 
-    #X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3,shuffle=True,random_state=109)
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3,shuffle=True,random_state=109)
-    # train
+    # use with resampling
 
+    # oversampling
+    ros = RandomOverSampler(random_state=0)
+    X_resampled, y_resampled = ros.fit_resample(features, labels)
+
+    # resampling
+    # X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.3,shuffle=True,random_state=109)
+    # print("resampled items:", sorted(Counter(y_resampled).items()))
+
+    # X_new = SelectKBest(mutual_info_classif).fit_transform(features, labels)
+
+    # no resampling
+    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.3, shuffle=True, random_state=109)
+
+    print("splitted train items:", sorted(Counter(y_train).items()))
+    print("splitted test items:", sorted(Counter(y_test).items()))
+
+    # train
     clf = tree.DecisionTreeClassifier()
     clf = clf.fit(X_train, y_train)
 
-    print( "=====>", X_train.shape[0], y_test.shape[0] )
+    print( "=====>", X_train.shape[0], y_test.shape[0])
     # # test
 
     prediction = clf.predict(unseen_feats) #X_test
@@ -210,14 +220,43 @@ def main():
     print("features_importances ==>")
     print(clf.feature_importances_)
 
+    # spliting
+
+
+
+    # test
+    # print(sorted(Counter(y_resampled).items()))
+    # test on either X_test/y_test or unseen_feats/unseen_labels
+
+    pred_automatic = clf.predict(X_test)
+    gold_automatic = y_test
+
+    pred_manual = clf.predict(unseen_feats)
+    gold_manual = unseen_labels
+
+
     print("label categories ==>")
+
     print(l_enc.classes_) # categories of labels
 
-    print("prediction ==> ", prediction)
-    print("gold ===>", gold)
-    print(classification_report(gold, prediction))
+    mapping = get_integer_mapping(l_enc)
+    print("event:", mapping["event_ref"])
+    print("nominal:", mapping["nominal_ref"])
+    print("pleo:", mapping["pleonastic_ref"])
+
+    print("**results test on automatic annotation**")
+    print("prediction ==> ", pred_automatic)
+    print("gold ===>", gold_automatic)
+    print(classification_report(gold_automatic, pred_automatic))
+
+    print("**results test on manual annotation**")
+    print("prediction ==> ", pred_manual)
+    print("gold ===>", gold_manual)
+    print(classification_report(gold_manual, pred_manual))
+
+
     #
-    # # # interpretability
+    # # # draw tree
     #
     interpret(f_enc, clf)
 
