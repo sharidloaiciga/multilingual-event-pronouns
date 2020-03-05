@@ -55,46 +55,53 @@ means of cheap supervision for the task of it-disambiguation. We found that only
 \footnotetext[1]{Work completed while the first author was affiliated at the
 Department of Philosophy, Linguistics and Theory of Science, University of Gothenburg.}
 
+Nominal coreference has been studied extensively, but work on the automatic 
+recognition of non-nominal anaphora is scarce, as are annotated data sets. Among 
+the challenges of non-nominal anaphora is the difficulty to characterize the 
+large variance of antecedent types, which often include clauses, sentences, and 
+even paragraphs. Here we focus on the English pronoun \textit{it} and its 
+capacity to serve as anaphor for nominal and non-nominal antecedents. 
 
-Depending on the context, the English pronoun \textit{it} can express anaphoric
+Depending on the context, the English pronoun \textit{it} can express anaphoric 
 reference with a nominal entity antecedent or with a
 non-nominal antecedent such as an event. It can also be used
 pleonastically. The examples \ref{ex:nominal} to \ref{ex:pleo} below illustrate
 these different readings using English passages from the Europarl corpus and
-their French parallel translations. Nominal coreference has been studied
-extensively, but work on the automatic recognition of non-nominal anaphora is
-scarce, as are annotated data sets.
+their French parallel translations. 
 
-In this paper, we evaluate the potential of multilingual parallel data to create artificial 
-training data  
-for the classification of different readings of `it', by exploiting the hypothesis that languages 
-have different preferences to encode
-the competing readings. Multilingual parallel data serves thus as a cheap
-supervision signal. 
+In this paper, we evaluate the potential of multilingual parallel data as a 
+form of supervision for the classification of different readings of the English 
+pronoun \textit{it}. We explore the hypothesis that languages have different strategies 
+and preferences to encode referential relationships, and that these differences 
+surface as systematic patterns in multilingual parallel data. Therefore, the 
+competing readings of the pronoun \textit{it} should present different strategies of 
+translation across languages.  
 
-While developing the method, we found that the `event' reading can be easily
+We present a method for creating artificial training data for the classification 
+of three different readings of \textit{it}: entity, event or pleonastic. 
+We found that the `event' reading can be easily
 predicted, as the languages studied here have a similar strategy for their translation. 
-Despite this, `event' uses of the pronoun `it' are not enough to generalize to
+Despite this, `event' uses of the pronoun \textit{it} are not enough to generalize to
 other types of non-nominal reference. Deictic uses in particular, are expressed
 very differently and are therefore difficult to normalize.
 
 %Anaphoric non-nominals are typically discarded in the non-referring basket
 %together with pleonastics. 
 %
-%In this paper we mine examples automatically.
-%
+
 \begin{enumerate}
 
 \item\label{ex:nominal} \textsc{Entity reading}
 
-This year we celebrate the 10th anniversary of the euro and on 1 January 2009
-Slovakia became the 16th member of the euro area. \textbf{My country} has surrendered a
-part of its identity, but \textbf{it} has done so with pride.
+Madam President, I have been deluged with messages from growers from all over 
+the south-east of England who regard this proposal as near catastrophic. 
+\textbf{It} will result, they tell me, in smaller crops and in higher prices. 
 
-\textit{Cette année, nous célébrons le 10e anniversaire de l'euro et, le 1er janvier
-2009, la Slovaquie est devenue le 16e membre de la zone euro. \textbf{Mon pays} a
-abandonné une partie de son identité, mais \textbf{il} l'a fait avec fierté}
-
+\textit{Madame la Présidente, j'ai été assailli de messages de cultivateurs 
+en provenance de tout le sud-est de l'Angleterre, qui considèrent cette 
+proposition comme une quasi-catastrophe. \textbf{Elle} entraînera, me 
+disent-ils, une baisse de les rendements agricoles et une augmentation des 
+prix.}
 
 %The infectious disease that's killed more humans than any other is
 %\textbf{malaria}.  \textbf{It}'s carried in the bites of infected mosquitos.
@@ -299,7 +306,7 @@ Entity & Event & Pleonastic \\
 \multicolumn{14}{c}{\textbf{Features}}\\ \midrule DE & ES & ET & FI &HU& IT &
 LV&NL & PL & PT &  RO& SK& SL& SV  \\ &&&&&&&&&&&&&\\ 
 
-\textit{empty}&\textit{idea}&\textit{seda}&\textit{empty}&\textit{képeznie}&\textit{essenza}&\textit{es}&\textit{dit}&\textit{dodać}&\textit{adaug}&\textit{že}&\textit{empty}&\textit{detta}\\
+\textit{empty}&\textit{idea}&\textit{seda}&\textit{empty}&\textit{képeznie}&\textit{essenza}&\textit{es}&\textit{dit}&\textit{dodać}&\textit{adaug}&\textit{že}&\textit{empty}&\textit{empty}&\textit{detta}\\
 
 \textit{du}&\textit{usted}&\textit{sa}&\textit{empty}&\textit{te}&\textit{l'}&\textit{empty}&\textit{u}&\textit{empty}&\textit{empty}&\textit{eşti}&\textit{ty}&\textit{empty}&\textit{du}\\
 
