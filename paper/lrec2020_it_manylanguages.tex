@@ -180,10 +180,13 @@ effective than any of the other types of features reported in previous works.
 
 \section{Method}
 
-We used the corpus Europarl \cite{Koehn2005} v8 as found in the OPUS collection
-\cite{TIEDEMANN12.463}. OPUS also includes parsed and sentence-level and
-word-level alignments files for the Europarl corpus. We used all 15 languages
-paired with English as the source language. The languages are German, Finnish, Swedish, Italian, Latvian, Dutch, Hungarian, Polish, Slovenian, Portuguese, Slovak, Romanian, Estonian, and Spanish.  
+We worked with the corpus Europarl \cite{Koehn2005} v8 as provided in the OPUS 
+collection \cite{TIEDEMANN12.463}. OPUS includes parsed, sentence-level 
+and word-level alignments files, as well as a toolbox for corpus processing 
+\cite{aulamo-et-al-opus}. We used all 15 languages paired with English as the 
+source language. The languages are German, Spanish, Estonian, Finnish, 
+Hungarian, Italian, Latvian, Dutch, Polish, Portuguese, Romanian, Slovak and 
+Slovenian.  
 
 The overall method is as follows:
 
@@ -191,19 +194,19 @@ The overall method is as follows:
 
 \item Europarl is a parallel corpus of translations
 between the language pairs, but the amount of data from one language to another
-varies. Therefore we began by extracting only the set of common sentences
-accross all languages. This already reduced the data from 2,039,537 segments to
-286,053.
+varies. Therefore, we began by extracting only the set of common sentences
+across all languages. This already reduced the data from 2,039,537 segments to
+281,346. 
 
 \item  Next, we relied on the English parsed files to
-identify all instances of the pronoun `it'.
+identify all instances of the pronoun \textit{it}.
 
 \item We then used the word-level alignment files to
-extract the aligned translation in all the languages.
+extract the aligned translation in each of the target languages.
 
 Word alignment is not perfect. One-to-one correspondences are unstable for
-particles and other small word forms, in particular if they depend on verbs and might
-be translated by just one verb form, virtually disappearing then from the
+particles and other small word forms, in particular if they depend on verbs and 
+might be translated by just one verb form, virtually disappearing then from the
 translation. Pronouns in particular, depending on the language, might not be
 translated for instance if the language is a pro-drop one, or they might be
 translated as a full nominal phrase, because the language has a different use of
@@ -211,20 +214,21 @@ pronouns.
 
 For improving the quality of the word alignments, we used a window of -3 and
 +3 tokens before and after the position of the aligned token. This means that if
-the translated token was not a pronoun (we have POS information from the parsing
-files), we would search for a pronoun translation within the window range.
+the translated token is not a pronoun (we have POS information from the parsing
+files), we search for a pronoun translation within the window range.
 
 \item We aim at creating English data in which the instances of
-`it' are annotated as `entity', `event' or `pleonastic'. While the three
+\textit{it} are annotated as `entity', `event' or `pleonastic'. While the three
 readings use the same pronoun in English, we rely on the assumption that they
 have at least partially different realizations in the other languages.
 
-For the expletives, we took all instances of `it' analyzed as expletives in the
-parsed files. These files have been processed using universal dependencies v2.0
-(UDPipe parser, models from 2017-08-01), which includes the dedicated dependency
-relation \texttt{expl} \cite{bouma-etal-2018-expletives}.
+For the `pleonastic' readings, we took all instances of `it' analyzed as 
+expletives in the parsed files. These files have been processed using universal 
+dependencies v2.0 (UDPipe parser, models from 2017-08-01), which includes the 
+dedicated dependency relation \texttt{expl} \cite{bouma-etal-2018-expletives}.
 
-Taking advantage of the parallel data, we decided to use French as a seed language, and
+For the `entity' and `event' reading, we take advantace of the parallel data, 
+and use French as a seed language. 
 consider all instances translated with the neutral demonstrative pronouns
 \textit{cela}, \textit{ceci} or \textit{ça} as events. In French, these pronoun
 are typically used to reference proposition or phrases. For the entity nominal
