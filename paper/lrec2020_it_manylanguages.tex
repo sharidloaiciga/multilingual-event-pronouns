@@ -1,15 +1,22 @@
-\documentclass[10pt, a4paper]{article} \usepackage{lrec} \usepackage{multibib}
-\newcites{languageresource}{Language Resources} \usepackage{graphicx}
-\usepackage{tabularx} \usepackage{soul}
+\documentclass[10pt, a4paper]{article}
+
+\usepackage{lrec}
+\usepackage{multibib}
+\newcites{languageresource}{Language Resources}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{soul}
 
 \usepackage{booktabs}
 \usepackage[symbol]{footmisc}
 
 % for eps graphics
 % 
-\usepackage{epstopdf} \usepackage[utf8]{inputenc}
+\usepackage{epstopdf}
+\usepackage[utf8]{inputenc}
 
-\usepackage{hyperref} \usepackage{xstring}
+%\usepackage{hyperref}
+\usepackage{xstring}
 
 \usepackage{color}
 
@@ -138,35 +145,60 @@ finalement réussi. \textbf{Il} est intéressant que M. Rogalski ait été autor
 
 \section{Related Work}
 
-The study of reference has mostly focused on nominal expressions and their
-relationships of coreference. Therefore, the biggest annotation efforts in the
-field of coreference resolution have also focused on nominal coreference.
-Ontonotes \cite{pradhan-xue-2009-ontonotes}, the largest and most used corpus today, 
-for instance, only includes verbs if ``they can be co-referenced with an
-existing noun phrase'' according to its guidelines.
+Reference to non-nominal antecedents has largely been a niche area in NLP
+research, which is extensively surveyed in a recent article by
+\newcite{kolhatkar-etal-2018-survey}. The most extensive annotation efforts in
+the field of coreference resolution have focused on nominal coreference.
+OntoNotes \cite{Pradhan:2013}, the largest and most frequently used corpus for
+training coreference resolution systems, for instance, only includes verbs if
+``they can be co-referenced with an existing noun phrase'' according to its
+guidelines. Corpora with a richer annotation of event pronouns exist, but are
+much smaller. The most important resource is the ARRAU corpus
+\cite{poesio-etal-2018-anaphora}, whose size amounts to about 20\% of version~5
+of OntoNotes. ParCorFull \cite{Lapshinova-Koltunski-Hardmeier-Krielke2018} also
+contains annotations of event pronouns.
+
+The scarcity of manually annotated resources has led to the use of artificial
+training data for the resolution of non-nominal anaphora.
+\newcite{kolhatkar-etal-2013-interpreting} study the resolution of anaphoric
+shell nouns such as `this issue' or `this fact' by exploiting
+cataphoric instances such as `the fact that\ldots'.
+\newcite{marasovic-etal-2017-mention} construct training examples based on
+specific patterns of verbs governing embedded sentences. As far as we know, the
+use of multilingual data for automatic data creation is novel in our work.
+
 
 %They give the following example:
 %
 % Sales of passenger cars [grew]x 22\%. [The strong growth]x followed
 % year-to-year increases.
 % 
-It follows that most anaphora and coreference resolution systems focus on
-nominal reference. Before current state of art systems which work in a
-end-to-end fashion, these systems needed to explicitly do mention classification
-in order to exclude non-referential mentions before any resolution was attempted.
-In this context, the pronoun `it' has been targeted, as many of its uses are
-non-referential. \cite{Evans2001} proposes the classification of the pronoun `it' into seven
-classes using contextual features. \cite{Boyd2005} report similar results of
-around 80\% accuracy using more complex syntactic patterns.
+Before the breakthrough of neural end-to-end systems in coreference resolution
+\cite{Lee:2017}, coreference resolvers needed to do explicit mention
+classification in order to exclude non-referential mentions before any
+resolution was attempted. In this context, the pronoun `it' has been targeted,
+as many of its uses are non-referential. \newcite{Evans2001} proposes the
+classification of the pronoun `it' into seven classes using contextual features.
+\newcite{Boyd2005} report similar results of around 80\% accuracy using more
+complex syntactic patterns. \newcite{Bergsma:2011} describe a system for
+identifying non-referential pronouns using web $n$-gram features, however
+without accounting explicitly for event reference.
 
-The many uses of `it' are also particularly relevant in dialog texts, where event reference is much more common than in news data. In this context, \cite{muller-2007-resolving} proposes a disambiguation of `it' together with the deictic pronouns `this' and `that'.  Last, \cite{Lee2016} create a corpus for it-disambiguation in question answering, a domain close to dialog. It is worth noting that current coreference resolution systems are not trained to manage dialog data.
+The many uses of `it' are also particularly relevant in dialog texts, where
+event reference is much more common than in news data. In this context,
+\newcite{muller-2007-resolving} proposes a disambiguation of `it' together with
+the deictic pronouns `this' and `that'.  Finally, \newcite{Lee2016} create a corpus
+for it-disambiguation in question answering, a domain close to dialog. It is
+worth noting that current coreference resolution systems are not trained to
+manage dialog data.
 
-More recently,  \cite{Loaiciga2017itrnn} has proposed a semi-supervised setup based on a
-combination of syntactic and semantic features used in a two-step classification
-approach where a maximum entropy classifier is used first and a recurrent
-recursive network (RNN) after. \cite{yaneva-etal-2018-classifying}, on the other
-hand, reports on experiments using features from eye gaze that prove to be more
-effective than any of the other types of features reported in previous works.
+More recently,  \newcite{Loaiciga2017itrnn} proposed a semi-supervised setup
+based on a combination of syntactic and semantic features used in a two-step
+classification approach where a maximum entropy classifier is used first and a
+recurrent recursive network (RNN) after. \newcite{yaneva-etal-2018-classifying},
+on the other hand, report on experiments using features from eye gaze that prove
+to be more effective than any of the other types of features reported in
+previous works.
 
 
 
@@ -461,7 +493,7 @@ Christian Hardmeier was supported by the Swedish Research Council under grant 20
 \bibliographystyle{lrec} \bibliography{lrec2020_it_manylanguages}
 
 
-\bibliographystylelanguageresource{lrec}
-\bibliographylanguageresource{languageresource}
+%\bibliographystylelanguageresource{lrec}
+%\bibliographylanguageresource{languageresource}
 
 \end{document}
