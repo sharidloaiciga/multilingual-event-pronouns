@@ -60,22 +60,23 @@ recognition of non-nominal anaphora is scarce, as are annotated data sets. Among
 the challenges of non-nominal anaphora is the difficulty to characterize the 
 large variance of antecedent types, which often include clauses, sentences, and 
 even paragraphs. Here we focus on the English pronoun \textit{it} and its 
-capacity to serve as anaphor for nominal and non-nominal antecedents. 
+capacity to function as anaphor for nominal entity and non-nominal event 
+antecedents, and as a pleonastic token. The examples \ref{ex:nominal} to 
+\ref{ex:pleo} below illustrate these different readings using English passages 
+from the Europarl corpus and their French parallel translations.
 
-Depending on the context, the English pronoun \textit{it} can express anaphoric 
-reference with a nominal entity antecedent or with a
-non-nominal antecedent such as an event. It can also be used
-pleonastically. The examples \ref{ex:nominal} to \ref{ex:pleo} below illustrate
-these different readings using English passages from the Europarl corpus and
-their French parallel translations. 
+%Depending on the context, the English pronoun \textit{it} can express anaphoric 
+%reference with a nominal entity antecedent or with a
+%non-nominal antecedent such as an event. It can also be used
+%pleonastically.  
 
 In this paper, we evaluate the potential of multilingual parallel data as a 
 form of supervision for the classification of different readings of the English 
-pronoun \textit{it}. We explore the hypothesis that languages have different strategies 
-and preferences to encode referential relationships, and that these differences 
-surface as systematic patterns in multilingual parallel data. Therefore, the 
-competing readings of the pronoun \textit{it} should present different strategies of 
-translation across languages.  
+pronoun \textit{it}. We explore the hypothesis that languages have different 
+strategies and preferences to encode referential relationships, and that these 
+differences surface as systematic patterns in multilingual parallel data. 
+Therefore, the competing readings of the pronoun \textit{it} should present 
+different strategies of translation across languages.  
 
 We present a method for creating artificial training data for the classification 
 of three different readings of \textit{it}: entity, event or pleonastic. 
@@ -374,7 +375,7 @@ instances.}\label{tab:manualsample600}
 %
 \section{Classification Experiments}
 
-We used 22,554 generated examples in a classification setting. All the experiments were completed using the implementations of the \texttt{scikit-learn} library, including their \texttt{train\_test\_split} function. 
+We used the 22,615 generated examples in a classification setting. All the experiments were completed using the implementations of the \texttt{scikit-learn} library, including their \texttt{train\_test\_split} function. 
 
 In a first experiment, we use the generated data tor predict one of the three automatically generated labels: `entity', `event' or `pleonastic'. We report results using a maximum entropy classifier, although replication experiments using a SVM and a Naive Bayes classifier yielded very similar results. 
 
