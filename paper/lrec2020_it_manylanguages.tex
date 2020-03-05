@@ -64,19 +64,15 @@ their French parallel translations.
 
 In this paper, we evaluate the potential of multilingual parallel data as a 
 form of supervision for the classification of different readings of the English 
-pronoun `it'. We explore the hypothesis that languages have different strategies 
+pronoun \textit{it}. We explore the hypothesis that languages have different strategies 
 and preferences to encode referential relationships, and that these differences 
 surface as systematic patterns in multilingual parallel data. Therefore, the 
-competing readings of the pronoun `it' should present different strategies of 
+competing readings of the pronoun \textit{it} should present different strategies of 
 translation across languages.  
 
-
-to create 
-artificial training data for the classification of different readings of `it', 
-by exploiting the hypothesis that  Multilingual parallel data serves thus as a cheap
-supervision signal. 
-
-While developing the method, we found that the `event' reading can be easily
+We present a method for creating artificial training data for the classification 
+of three different readings of \textit{it}: entity, event or pleonastic. 
+We found that the `event' reading can be easily
 predicted, as the languages studied here have a similar strategy for their translation. 
 Despite this, `event' uses of the pronoun `it' are not enough to generalize to
 other types of non-nominal reference. Deictic uses in particular, are expressed
@@ -85,8 +81,7 @@ very differently and are therefore difficult to normalize.
 %Anaphoric non-nominals are typically discarded in the non-referring basket
 %together with pleonastics. 
 %
-%In this paper we mine examples automatically.
-%
+
 \begin{enumerate}
 
 \item\label{ex:nominal} \textsc{Entity reading}
@@ -277,7 +272,7 @@ Entity & Event & Pleonastic \\
 \multicolumn{14}{c}{\textbf{Features}}\\ \midrule DE & ES & ET & FI &HU& IT &
 LV&NL & PL & PT &  RO& SK& SL& SV  \\ &&&&&&&&&&&&&\\ 
 
-\textit{empty}&\textit{idea}&\textit{seda}&\textit{empty}&\textit{képeznie}&\textit{essenza}&\textit{es}&\textit{dit}&\textit{dodać}&\textit{adaug}&\textit{že}&\textit{empty}&\textit{detta}\\
+\textit{empty}&\textit{idea}&\textit{seda}&\textit{empty}&\textit{képeznie}&\textit{essenza}&\textit{es}&\textit{dit}&\textit{dodać}&\textit{adaug}&\textit{že}&\textit{empty}&\textit{empty}&\textit{detta}\\
 
 \textit{du}&\textit{usted}&\textit{sa}&\textit{empty}&\textit{te}&\textit{l'}&\textit{empty}&\textit{u}&\textit{empty}&\textit{empty}&\textit{eşti}&\textit{ty}&\textit{empty}&\textit{du}\\
 
