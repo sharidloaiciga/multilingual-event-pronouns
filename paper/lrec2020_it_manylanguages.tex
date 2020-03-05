@@ -333,11 +333,11 @@ LV&NL & PL & PT &  RO& SK& SL& SV  \\ &&&&&&&&&&&&&\\
 
 A manual analysis of a sample of 600 instances confirms that a big drawback of  
 the method is the large number of examples for which a label cannot be determined, 
-as shown in the column `Unknown' in Table \ref{tab:manualsample600} (these 
-'unknown' examples are not counted in our 22,615 labeled examples reported above). 
+as shown in the column `Unknown' in Table \ref{tab:manualsample600} (these examples are not counted in our 22,615 labeled examples reported above). 
 As for the examples that are labeled, the main 
-problem is the annotation of pleonastics as nominals. These are therefore, 
-parsing errors. In addition, there is a natural imbalance in the classes, with 
+problem is the annotation of pleonastics as nominals. Since we take pleonastic 
+from the parsing annotation, these are therefore undetected expletive constructions by the parser that get labeled as nominals by our assumption French \textit{il} $\rightarrow$ entity. In addition, 
+there is a natural imbalance in the classes, with 
 nominal and pleonastic instances being largely more frequent than events.  
 
 Concerning the quality of the annotation, it can
