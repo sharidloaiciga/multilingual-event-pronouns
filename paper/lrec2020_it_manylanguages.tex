@@ -48,21 +48,32 @@ means of cheap supervision for the task of it-disambiguation. We found that only
 \footnotetext[1]{Work completed while the first author was affiliated at the
 Department of Philosophy, Linguistics and Theory of Science, University of Gothenburg.}
 
+Nominal coreference has been studied extensively, but work on the automatic 
+recognition of non-nominal anaphora is scarce, as are annotated data sets. Among 
+the challenges of non-nominal anaphora is the difficulty to characterize the 
+large variance of antecedent types, which often include clauses, sentences, and 
+even paragraphs. Here we focus on the English pronoun \textit{it} and its 
+capacity to serve as anaphor for nominal and non-nominal antecedents. 
 
-Depending on the context, the English pronoun \textit{it} can express anaphoric
+Depending on the context, the English pronoun \textit{it} can express anaphoric 
 reference with a nominal entity antecedent or with a
 non-nominal antecedent such as an event. It can also be used
 pleonastically. The examples \ref{ex:nominal} to \ref{ex:pleo} below illustrate
 these different readings using English passages from the Europarl corpus and
-their French parallel translations. Nominal coreference has been studied
-extensively, but work on the automatic recognition of non-nominal anaphora is
-scarce, as are annotated data sets.
+their French parallel translations. 
 
-In this paper, we evaluate the potential of multilingual parallel data to create artificial 
-training data  
-for the classification of different readings of `it', by exploiting the hypothesis that languages 
-have different preferences to encode
-the competing readings. Multilingual parallel data serves thus as a cheap
+In this paper, we evaluate the potential of multilingual parallel data as a 
+form of supervision for the classification of different readings of the English 
+pronoun `it'. We explore the hypothesis that languages have different strategies 
+and preferences to encode referential relationships, and that these differences 
+surface as systematic patterns in multilingual parallel data. Therefore, the 
+competing readings of the pronoun `it' should present different strategies of 
+translation across languages.  
+
+
+to create 
+artificial training data for the classification of different readings of `it', 
+by exploiting the hypothesis that  Multilingual parallel data serves thus as a cheap
 supervision signal. 
 
 While developing the method, we found that the `event' reading can be easily
@@ -87,7 +98,6 @@ part of its identity, but \textbf{it} has done so with pride.
 \textit{Cette année, nous célébrons le 10e anniversaire de l'euro et, le 1er janvier
 2009, la Slovaquie est devenue le 16e membre de la zone euro. \textbf{Mon pays} a
 abandonné une partie de son identité, mais \textbf{il} l'a fait avec fierté}
-
 
 %The infectious disease that's killed more humans than any other is
 %\textbf{malaria}.  \textbf{It}'s carried in the bites of infected mosquitos.
