@@ -40,7 +40,7 @@ sharid.loaiciga@gmail.com, christian.hardmeier@lingfil.uu.se, asad.sayeed@gu.se}
 coreference, partly because of the lack of annotated corpora. In this paper, we
 have explored the possibility to exploit parallel multilingual corpora as a
 means of cheap supervision for the task of it-disambiguation. We found that only a very specific `event' reading is discernible using our approach.  \\ \newline
-\Keywords{`it', reference, Europarl corpus} }
+\Keywords{\textit{it}, reference, Europarl corpus} }
 
 
 \begin{document}
@@ -184,18 +184,18 @@ use of multilingual data for automatic data creation is novel in our work.
 Before the breakthrough of neural end-to-end systems in coreference resolution
 \cite{Lee:2017}, coreference resolvers needed to do explicit mention
 classification in order to exclude non-referential mentions before any
-resolution was attempted. In this context, the pronoun `it' has been targeted,
+resolution was attempted. In this context, the pronoun \textit{it} has been targeted,
 as many of its uses are non-referential. \newcite{Evans2001} proposes the
-classification of the pronoun `it' into seven classes using contextual features.
+classification of the pronoun \textit{it} into seven classes using contextual features.
 \newcite{Boyd2005} report similar results of around 80\% accuracy using more
 complex syntactic patterns. \newcite{Bergsma:2011} describe a system for
 identifying non-referential pronouns using web $n$-gram features, however
 without accounting explicitly for event reference.
 
-The many uses of `it' are also particularly relevant in dialog texts, where
+The many uses of \textit{it} are also particularly relevant in dialog texts, where
 event reference is much more common than in news data. In this context,
-\newcite{muller-2007-resolving} proposes a disambiguation of `it' together with
-the deictic pronouns `this' and `that'.  Finally, \newcite{Lee2016} create a corpus
+\newcite{muller-2007-resolving} proposes a disambiguation of \textit{it} together with
+the deictic pronouns \textit{this} and `that'.  Finally, \newcite{Lee2016} create a corpus
 for it-disambiguation in question answering, a domain close to dialog. It is
 worth noting that current coreference resolution systems are not trained to
 manage dialog data.
@@ -471,17 +471,17 @@ resampling to achieve an even distribution of the classes.}\label{tab:maxentover
 \section{Discussion and Conclusion}
 
 The experiments presented in the previous section suggest that relying on 
-translations as features for the different readings of `it' is a good method for 
+translations as features for the different readings of \textit{it} is a good method for 
 the cases of \textit{it} that are captured by the seed language assumptions, as 
 these cases also present a pronoun translation in the other languages. These 
 represent about 30\% of the total amount of pronouns 
-`it' and unfortunately they do not seem to generalize to the rest of the 
+\textit{it} and unfortunately they do not seem to generalize to the rest of the 
 cases. 
 
 Further analysis from the output of a decision tree classifier on the same data 
 partition confirms this finding. As shown in Figure \ref{fig:decisiontree}, the 
-top leaves in the tree all contain equivalent translations of either `it' or 
-`this', pronouns associated with `entity' and `event' respectively. 
+top leaves in the tree all contain equivalent translations of either \textit{it} or 
+\textit{this}, pronouns associated with `entity' and `event' respectively. 
 
 
 \begin{figure}\small
@@ -503,7 +503,7 @@ top leaves in the tree all contain equivalent translations of either `it' or
 
 
 Although we originally sought to identify systematic translations patterns 
-indicative of non-nominal uses of `it', through 
+indicative of non-nominal uses of \textit{it}, through 
 developing this method we found that apart from the pronoun-to-pronoun 
 translation pattern, there is too much variability in the data. 
 
@@ -519,7 +519,7 @@ Take for instance the following example:
 
 \vspace{1em}
 
-In the example the English pronoun `it' refers to all what has previously been 
+In the example the English pronoun \textit{it} refers to all what has previously been 
 mentioned in the long sentence, a typical `event' reading of the pronoun. The 
 French translation, however, prefers a translation with a full lexical noun 
 phrase \textit{ces questions} (these questions) for the same referential 
