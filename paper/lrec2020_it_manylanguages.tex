@@ -285,7 +285,7 @@ annotated automatically. }\label{tab:labelingtotals}
 
 
 \item The translations from the other 14 languages that are not French are used as 
-features for the classification task. We present and example in 
+features for a classification task (Section \ref{sec:experiments}). We present an example in 
 Figure \ref{fig:featuresexample}, where each line represents a feature vector.
 
 \end{enumerate}
@@ -326,8 +326,9 @@ LV&NL & PL & PT &  RO& SK& SL& SV  \\ &&&&&&&&&&&&&\\
 \textit{empty}&\textit{es}&\textit{üksluine}&\textit{ne}&\textit{dolog}&\textit{in}&\textit{tas}&\textit{empty}&\textit{co}&\textit{empty}&\textit{ce}&\textit{spôsobom}&\textit{govoriti}&\textit{allt}\\
 									
  \bottomrule
- \end{tabular}} \caption{Exemplification of the extracted
- features.}\label{fig:featuresexample} 
+ \end{tabular}} \caption{Exemplification of the extracted translations 
+ of English \textit{it} used as input features features in the 
+ classificaton experiments.}\label{fig:featuresexample} 
  \end{figure*} 
  \end{center}
 
@@ -373,11 +374,18 @@ instances.}\label{tab:manualsample600}
 %
 %
 %
-\section{Classification Experiments}
+\section{Classification Experiments}\label{sec:experiments}
 
-We used the 22,615 generated examples in a classification setting. All the experiments were completed using the implementations of the \texttt{scikit-learn} library, including their \texttt{train\_test\_split} function. 
+We used the 22,615 generated examples in a classification setting. All the 
+experiments were completed using the implementations of the 
+\texttt{scikit-learn} library, including their \texttt{train\_test\_split} 
+function. 
 
-In a first experiment, we use the generated data tor predict one of the three automatically generated labels: `entity', `event' or `pleonastic'. We report results using a maximum entropy classifier, although replication experiments using a SVM and a Naive Bayes classifier yielded very similar results. 
+In a first experiment, we use the extracted translations with the split in Table 
+\ref{tab:split} to predict one of the three automatically generated labels: 
+`entity', `event' or `pleonastic'. We report results using a Maximum Entropy 
+classifier, although replication experiments using a SVM and a Naive Bayes 
+classifier yielded very similar results. 
 
 
 \begin{table}[h!]\centering
@@ -385,13 +393,18 @@ In a first experiment, we use the generated data tor predict one of the three au
 \toprule
 \textbf{Train} & \textbf{Test} & \textbf{Total} \\
 \midrule
-15,698 & 6,728 & 22,426 \\
+15,887 & 6,728 & 22,615 \\
 \bottomrule
 \end{tabular}
-\caption{Data set split for the classification experiments. }
+\caption{Data set split for the classification experiments.}\label{tab:split}
 \end{table}
 
- Although the results using the automatic labels seem reasonable (Table  \ref{tab:maxentautomatic}), when using the same model to predict the manually annotated sample of 600 instances, we see a dramatic decrease in performance, in particular for the `event' class. As mentioned before, this class has a natural low frequency, which makes it more difficult to predict. 
+Although the results using the automatic labels seem reasonable (Table  
+\ref{tab:maxentautomatic}), when applying the same model to predict the manually 
+annotated sample of 600 instances, we see a dramatic decrease in performance, in 
+particular for the `event' class. As mentioned before, this class has a natural 
+low frequency, which makes it more 
+difficult to predict in itself, with only 6 examples accurately labeled in the manual sample. 
 
 \begin{center} \begin{table}[h!]\centering 
 \begin{tabular}{l ccc}
@@ -412,11 +425,15 @@ Event &0.0 & 0.0 & (318/600)\\
 Pleonastic & 0.50 & 0.22 & \\ 
 \bottomrule
 \end{tabular} \caption{Classification results using a Maximum Entropy
-classifier.} 
-\end{table}\label{tab:maxentautomatic}
+classifier.} \label{tab:maxentautomatic}
+\end{table}
 \end{center}
 
-To address the problem of the uneven distribution of the classes, in a second experiment, we used bootstrap with resampling in order to achieve the same number of examples per class. 
+%At this point is important to have in mind that only 30\% of the examples in the 
+%sample are actually automatically labeled, in the case of the `event' class in particular only 6 examples are accurately labeled. 
+
+To determine whether the imbalance in the data is a factor preventing the model 
+to learn, in a second experiment, we used bootstrap with resampling in order to achieve the same number of examples per class. The data distribution for this experiment is given in Table \ref{tab:resamplingdata}.
 
 \begin{table}[h!]\centering
 \begin{tabular}{ccc}
@@ -426,10 +443,11 @@ To address the problem of the uneven distribution of the classes, in a second ex
 11,377 & 11,377 & 11,377 \\
 \bottomrule
 \end{tabular}
-\caption{Equal distribution of the classes for the experiment with oversampling.}
+\caption{Equal distribution of the classes for the experiment with 
+oversampling.}\label{tab:resamplingdata}
 \end{table}
 
-In this second scenario, we obtained a comparable performance for the `entity' and `pleonastic' classes, and almost perfect scores for the `event' class. 
+In this second scenario, we obtained a comparable performance for the `entity' and `pleonastic' classes, and almost perfect scores for the `event' class (Table \ref{tab:maxentoversampling}). 
 
 \begin{center} \begin{table}[h!] \begin{tabular}{cccc}
 \multicolumn{4}{c}{\textbf{Oversampling of the event class}}\\ 
@@ -447,33 +465,26 @@ resampling to achieve an even distribution of the classes.}\label{tab:maxentover
 \end{center}
 
 
+
+
+
 \section{Discussion and Conclusion}
 
-The experiments presented in the previous section seem to suggest that relying on translations as features for the different readings of `it' is a good method but only for a particular type of `event' that has a natural low frequency. Indeed, our method only produces labels for about 30\% of the total amount of pronouns `it' and within this, 'event' has the lowest absolute frequency. 
-
-Further analysis from the output of a decision tree classifier on the same data partition also suggests that this type of events are easily discernible. As shown in Figure \ref{fig:decisiontree}, the top leaves in the tree all contain equivalent translations of either `it' or `this', pronouns associated with `entity' and `event' respectively. 
-
-Although we originally sought to identify non-nominal uses of `it', through developing this method we found that the task is hard because there are many potential
+The experiments presented in the previous section suggest that relying on 
+translations as features for the different readings of `it' is a good method for 
+the cases of \textit{it} that are captured by the seed language assumptions, as 
+these cases also present a pronoun translation in the other languages. These 
+represent about 30\% of the total amount of pronouns 
+`it' and unfortunately they do not seem to generalize to the rest of the 
 cases. 
 
-Take for instance the following example:
+Further analysis from the output of a decision tree classifier on the same data 
+partition confirms this finding. As shown in Figure \ref{fig:decisiontree}, the 
+top leaves in the tree all contain equivalent translations of either `it' or 
+`this', pronouns associated with `entity' and `event' respectively. 
 
-\vspace{1em}
 
-\textsc{English} Madam President , Commissioners , can I say to you that less than a year ago we were debating in this Chamber what we were going to do about global food security , and was there enough food in the world , and we were terribly worried about \textit{it}.
-
-\textsc{French} \textit{Madame la Présidente , Mesdames et Messieurs les Commissaires , permettez -moi de vous rappeler qu' il y a moins d' un an , nous débattions en cette Assemblée de la manière de traiter la sécurité alimentaire mondiale , de la question de savoir si l' on produisait suffisamment de nourriture à l' échelle mondiale , et nous étions extrêmement préoccupés par \textbf{ces questions} .}
-
-\vspace{1em}
-
-In the example the English pronoun `it' refers to all what has previously been mentioned in the long sentence. The French translation, however, prefers a translation with a full lexical noun phrase \textit{ces questions} (these questions) for the same referential relationship. 
-
-The task could be approached semantically by identifying all abstract
-nouns referencing actions, nominalizations or eventualities in the text. Or one
-could decide to focus on particular syntactic configurations as
-\newcite{marasovic-etal-2017-mention}.
-
-\begin{figure}
+\begin{figure}\small
 \begin{verbatim}
  -- see_et<=0.5
 |  |--- é_pt<=0.5
@@ -490,13 +501,43 @@ could decide to focus on particular syntactic configurations as
 \caption{Output of a decision tree classifier. The leaves have the form \texttt{pronoun\_language}.}\label{fig:decisiontree}
 \end{figure}
 
+
+Although we originally sought to identify systematic translations patterns 
+indicative of non-nominal uses of `it', through 
+developing this method we found that apart from the pronoun-to-pronoun 
+translation pattern, there is too much variability in the data. 
+
+Take for instance the following example:
+
+\vspace{1em}
+
+\textsc{English} Madam President , Commissioners , can I say to you that less than a year ago we were debating in this Chamber what we were going to do about global food security , and was there enough food in the world , and we were terribly worried about \textbf{it}.
+
+\vspace{1em}
+
+\textsc{French} \textit{Madame la Présidente , Mesdames et Messieurs les Commissaires , permettez -moi de vous rappeler qu' il y a moins d' un an , nous débattions en cette Assemblée de la manière de traiter la sécurité alimentaire mondiale , de la question de savoir si l' on produisait suffisamment de nourriture à l' échelle mondiale , et nous étions extrêmement préoccupés par \textbf{ces questions} .}
+
+\vspace{1em}
+
+In the example the English pronoun `it' refers to all what has previously been 
+mentioned in the long sentence, a typical `event' reading of the pronoun. The 
+French translation, however, prefers a translation with a full lexical noun 
+phrase \textit{ces questions} (these questions) for the same referential 
+relationship. This is a particular case of a shell-noun \cite{kolhatkar-etal-2013-interpreting} and we believe that a
+multilingual study of this phenomenon might be a potential next logical step. 
+
+The task could be approached semantically by identifying all abstract
+nouns referencing actions, nominalizations or eventualities in the text. Or one
+could decide to focus on particular syntactic configurations as
+\newcite{marasovic-etal-2017-mention}.
+
+
 Non-nominal co-reference is much less studied than nominal coreference, partly
 because of the lack of annotated corpora. In this paper, we have explored the
 possibility to exploit parallel multilingual corpora as a means of cheap
-supervision for the task of it-disambiguation. Since pronoun `it' has many
+supervision for the task of it-disambiguation. Since pronoun \textit{it} has many
 potential uses or readings, we took it a as representative of the non-nominal
-coreference phenomenon, however, we found that only a very specific `event' reading 
-is discernible using our approach. 
+coreference phenomenon, however, we found that only a very specific case is discernible using our approach. 
 
 %\cite{Martin-90}
 %
