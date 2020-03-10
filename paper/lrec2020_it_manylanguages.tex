@@ -37,9 +37,14 @@ sharid.loaiciga@gmail.com, christian.hardmeier@lingfil.uu.se, asad.sayeed@gu.se}
 
 
 \abstract{ Non-nominal co-reference is much less studied than nominal
-coreference, partly because of the lack of annotated corpora. In this paper, we
-have explored the possibility to exploit parallel multilingual corpora as a
-means of cheap supervision for the task of it-disambiguation. We found that only a very specific `event' reading is discernible using our approach.  \\ \newline
+coreference, partly because of the lack of annotated corpora. We explore the 
+possibility to exploit parallel multilingual corpora as a means of cheap 
+supervision for the classification of three different readings of the English 
+pronoun \textit{it}: entity, event or pleonastic, from their translation in 
+several languages. We found that the `event' reading is not very frequent, but 
+can be easily predicted provided that the languages considered translate 
+\textit{it} as a pronoun as well. These cases, nevertheless, are not enough to 
+generalize to other types of non-nominal reference. \\ \newline
 \Keywords{\textit{it}, reference, Europarl corpus} }
 
 
@@ -71,20 +76,22 @@ from the Europarl corpus and their French parallel translations.
 %pleonastically.  
 
 In this paper, we evaluate the potential of multilingual parallel data as a 
-form of supervision for the classification of different readings of the English 
+source of indirect supervision for the annotation and classification of 
+different readings of the English 
 pronoun \textit{it}. We explore the hypothesis that languages have different 
 strategies and preferences to encode referential relationships, and that these 
 differences surface as systematic patterns in multilingual parallel data. 
 Therefore, the competing readings of the pronoun \textit{it} should present 
 different strategies of translation across languages.  
 
-We present a method for creating artificial training data for the classification 
-of three different readings of \textit{it}: entity, event or pleonastic. 
-We found that the `event' reading can be easily
-predicted, as the languages studied here have a similar strategy for their translation. 
-Despite this, `event' uses of the pronoun \textit{it} are not enough to generalize to
-other types of non-nominal reference. Deictic uses in particular, are expressed
-very differently and are therefore difficult to normalize.
+We present a method for creating artificially labeled data for the 
+classification of three different readings of \textit{it}: entity, event or 
+pleonastic, from their translation in several languages. We found that the 
+`event' reading is not very frequent, but can be easily predicted provided that 
+the languages considered translate \textit{it} as a pronoun as well. These 
+cases, nevertheless, are not enough to generalize to other types of non-nominal 
+reference. Deictic uses in particular, are expressed very differently and are 
+therefore difficult to normalize.
 
 %Anaphoric non-nominals are typically discarded in the non-referring basket
 %together with pleonastics. 
@@ -195,7 +202,7 @@ without accounting explicitly for event reference.
 The many uses of \textit{it} are also particularly relevant in dialog texts, where
 event reference is much more common than in news data. In this context,
 \newcite{muller-2007-resolving} proposes a disambiguation of \textit{it} together with
-the deictic pronouns \textit{this} and `that'.  Finally, \newcite{Lee2016} create a corpus
+the deictic pronouns \textit{this} and \textit{that}.  Finally, \newcite{Lee2016} create a corpus
 for it-disambiguation in question answering, a domain close to dialog. It is
 worth noting that current coreference resolution systems are not trained to
 manage dialog data.
@@ -218,10 +225,10 @@ collection \cite{TIEDEMANN12.463}. OPUS includes parsed, sentence-level
 and word-level alignments files, as well as a toolbox for corpus processing 
 \cite{aulamo-et-al-opus}. We used all 15 languages paired with English as the 
 source language. The languages are German, Spanish, Estonian, Finnish, 
-Hungarian, Italian, Latvian, Dutch, Polish, Portuguese, Romanian, Slovak and 
-Slovenian.  
+Hungarian, Italian, Latvian, Dutch, Polish, Portuguese, Romanian, Slovak, 
+Slovenian, and Swedish.
 
-The overall method is as follows:
+The data labeling method is as follows:
 
 \begin{enumerate}\setlength\itemsep{1em}
 
@@ -350,6 +357,10 @@ inspection of the `unknown' labels reveals that these are mostly due to many
 divergent translation from the assumptions we made by using French as the seed 
 language.  
 
+
+\textcolor{red}{Example?}
+
+
 \begin{table}[h!]\centering 
 \begin{tabular}{p{1.3cm}|cccccc} 
 &\multicolumn{4}{l}{\textbf{Automatic label $\rightarrow$}}\\
@@ -433,7 +444,7 @@ classifier.} \label{tab:maxentautomatic}
 %sample are actually automatically labeled, in the case of the `event' class in particular only 6 examples are accurately labeled. 
 
 To determine whether the imbalance in the data is a factor preventing the model 
-to learn, in a second experiment, we used bootstrap with resampling in order to achieve the same number of examples per class. The data distribution for this experiment is given in Table \ref{tab:resamplingdata}.
+to learn the distinction, in a second experiment, we used bootstrap with resampling in order to achieve the same number of examples per class. The data distribution for this experiment is given in Table \ref{tab:resamplingdata}.
 
 \begin{table}[h!]\centering
 \begin{tabular}{ccc}
@@ -471,8 +482,10 @@ resampling to achieve an even distribution of the classes.}\label{tab:maxentover
 \section{Discussion and Conclusion}
 
 The experiments presented in the previous section suggest that relying on 
-translations as features for the different readings of \textit{it} is a good method for 
-the cases of \textit{it} that are captured by the seed language assumptions, as 
+translations as features for the different readings of \textit{it} is a good 
+method for 
+the cases of \textit{it} that are captured by the seed language assumptions, 
+most probably because  
 these cases also present a pronoun translation in the other languages. These 
 represent about 30\% of the total amount of pronouns 
 \textit{it} and unfortunately they do not seem to generalize to the rest of the 
@@ -537,7 +550,7 @@ because of the lack of annotated corpora. In this paper, we have explored the
 possibility to exploit parallel multilingual corpora as a means of cheap
 supervision for the task of it-disambiguation. Since pronoun \textit{it} has many
 potential uses or readings, we took it a as representative of the non-nominal
-coreference phenomenon, however, we found that only a very specific case is discernible using our approach. 
+coreference phenomenon, however, we found that only a very specific subset of examples are discernible using our approach. 
 
 %\cite{Martin-90}
 %
