@@ -418,9 +418,9 @@ difficult to predict in itself, with only 6 examples accurately labeled in the m
 \toprule
 \textbf{MaxEnt}& Precision & Recall & Accuracy \\ 
 \midrule 
-\textit{it}-Entity &0.70 & 0.75 &   0.70\\
-\textit{it}-Event & 0.44 & 0.15 & (4,710/6,728) \\
-\textit{it}-Pleonastic & 0.70 & 0.68&   \\ 
+Entity &0.70 & 0.75 &   0.70\\
+Event & 0.44 & 0.15 & (4,710/6,728) \\
+Pleonastic & 0.70 & 0.68&   \\ 
 \midrule & & & \\
 \multicolumn{4}{c}{\textbf{Manually annotated sample}}  \\ 
 \midrule
@@ -455,7 +455,7 @@ oversampling.}\label{tab:resamplingdata}
 
 In this second scenario, we obtained a comparable performance for the `entity' and `pleonastic' classes, and almost perfect scores for the `event' class (Table \ref{tab:maxentoversampling}). 
 
-\begin{center} \begin{table}[h!] \begin{tabular}{cccc}
+\begin{center} \begin{table}[h!] \begin{tabular}{lccc}
 \multicolumn{4}{c}{\textbf{Oversampling of the event class}}\\ 
 \toprule
 \textbf{MaxEnt}& Precision & Recall & Accuracy \\ 
