@@ -90,8 +90,8 @@ pleonastic, from their translation in several languages. We found that the
 `event' reading is not very frequent, but can be easily predicted provided that 
 the languages considered translate \textit{it} as a pronoun as well. These 
 cases, nevertheless, are not enough to generalize to other types of non-nominal 
-reference. Deictic uses in particular, are expressed very differently and are 
-therefore difficult to normalize.
+reference. %Deictic uses in particular, are expressed very differently and are 
+%therefore difficult to normalize.
 
 %Anaphoric non-nominals are typically discarded in the non-referring basket
 %together with pleonastics. 
@@ -355,10 +355,7 @@ approximately 30\% accuracy overall (133/600) and 70\% accuracy if only successf
 examples are considered (133/189). A closer 
 inspection of the `unknown' labels reveals that these are mostly due to many 
 divergent translation from the assumptions we made by using French as the seed 
-language.  
-
-
-\textcolor{red}{Example?}
+language. Another reason is alignment errors. 
 
 
 \begin{table}[h!]\centering 
@@ -470,7 +467,7 @@ In this second scenario, we obtained a comparable performance for the `entity' a
   Pleonastic &  0.73 & 0.74 & \\
 \bottomrule 
 \end{tabular} 
-\caption{Classification results using bootstrap
+\caption{Classification results using bootstrap with 
 resampling to achieve an even distribution of the classes.}\label{tab:maxentoversampling}
 \end{table}
 \end{center}
@@ -499,20 +496,33 @@ top leaves in the tree all contain equivalent translations of either \textit{it}
 
 \begin{figure}\small
 \begin{verbatim}
- -- see_et<=0.5
-|  |--- é_pt<=0.5
-|  |  |--- tas_lv<=0.5
-|  |  |  |--- to_pl<=0.5
-|  |  |  |  |--- este_ro<=0.5
-|  |  |  |  |  |--- ez_hu<=0.5
-|  |  |  |  |  |  |--- es_es<=0.5
-|  |  |  |  |  |  |  |--- den_sv<=0.5
-|  |  |  |  |  |  |  |  |--- je_sk<=0.5
-|  |  |  |  |  |  |  |  |  |--- to_sk<=0.5
-|  |  |  |  |  |  |  |  |  |  |--se_fi<=0.5
+|--- see_et <= 0.50
+| |--- tas_lv <= 0.50
+| | |--- este_ro <= 0.50
+| | | |--- to_pl <= 0.50
+| | | | |--- ez_hu <= 0.50
+| | | | | |--- é_pt <= 0.50
+| | | | | | |--- dies_de <= 0.50
+| | | | | | | |--- je_sk <= 0.50
+| | | | | | | | |--- se_fi <= 0.50
+| | | | | | | | | |--- es_es <= 0.50
 \end{verbatim}
-\caption{Output of a decision tree classifier. The leaves have the form \texttt{pronoun\_language}.}\label{fig:decisiontree}
+\caption{Output of a decision tree classifier. The leaves shown correspond to
+the top of the tree and have the form \texttt{pronoun\_language}.}\label{fig:decisiontree}
 \end{figure}
+
+% -- see_et<=0.5
+%|  |--- é_pt<=0.5
+%|  |  |--- tas_lv<=0.5
+%|  |  |  |--- to_pl<=0.5
+%|  |  |  |  |--- este_ro<=0.5
+%|  |  |  |  |  |--- ez_hu<=0.5
+%|  |  |  |  |  |  |--- es_es<=0.5
+%|  |  |  |  |  |  |  |--- den_sv<=0.5
+%|  |  |  |  |  |  |  |  |--- je_sk<=0.5
+%|  |  |  |  |  |  |  |  |  |--- to_sk<=0.5
+%|  |  |  |  |  |  |  |  |  |  |--se_fi<=0.5
+
 
 
 Although we originally sought to identify systematic translations patterns 
@@ -520,30 +530,69 @@ indicative of non-nominal uses of \textit{it}, through
 developing this method we found that apart from the pronoun-to-pronoun 
 translation pattern, there is too much variability in the data. 
 
-Take for instance the following example:
+Take for instance the following examples:
 
-\vspace{1em}
 
-\textsc{English} Madam President , Commissioners , can I say to you that less than a year ago we were debating in this Chamber what we were going to do about global food security , and was there enough food in the world , and we were terribly worried about \textbf{it}.
+\begin{enumerate}
 
-\vspace{1em}
+\item[4.]\label{ex:freetrans} 
+%Can we accept that there should be differences between Member States? Between 
+%cities, in standards of protection for the urban environment? In road safety 
+%standards in cities? In standards of citizens' access to mobility? Or are they 
+%not fundamental rights that the Union should help to guarantee for all 
+%Europeans?
+\textsc{English} Well then, we need to establish standards and uniform minimum 
+objectives, but also best practices and financial incentives. We need 
+coordination and innovative projects, and to develop and share reliable and 
+comparable statistics. If the Union takes \textbf{it} on, will \textbf{this} not help in 
+realising those subsidiary solutions that Member States and local communities 
+have every right to be protective of? 
 
-\textsc{French} \textit{Madame la Présidente , Mesdames et Messieurs les Commissaires , permettez -moi de vous rappeler qu' il y a moins d' un an , nous débattions en cette Assemblée de la manière de traiter la sécurité alimentaire mondiale , de la question de savoir si l' on produisait suffisamment de nourriture à l' échelle mondiale , et nous étions extrêmement préoccupés par \textbf{ces questions} .}
+\textsc{French} \textit{À cette fin, nous devons élaborer de les normes et de 
+les 
+objectifs minimaux communs, de bonnes pratiques et autres incitants financiers. 
+Il faut une coordination; nous avons besoin de projets novateurs; nous devons 
+travailler sur de les statistiques fiables et comparables qu'il faut pouvoir 
+partager. Si l'Union \textbf{accepte}, ne \textbf{pourrons-nous} pas mettre en oeuvre ces 
+solutions reposant sur la subsidiarité que les étâts membres et les communautés 
+locales sont tout à fait en droit de protéger?}
 
-\vspace{1em}
 
-In the example the English pronoun \textit{it} refers to all what has previously been 
-mentioned in the long sentence, a typical `event' reading of the pronoun. The 
-French translation, however, prefers a translation with a full lexical noun 
-phrase \textit{ces questions} (these questions) for the same referential 
-relationship. This is a particular case of a shell-noun \cite{kolhatkar-etal-2013-interpreting} and we believe that a
-multilingual study of this phenomenon might be a potential next logical step. 
+\item[5.]\label{ex:shellnoun}\textsc{English} Madam President, Commissioners, 
+can I 
+say to you that less than 
+a year ago we were debating in this Chamber what we were going to do about 
+global food security, and was there enough food in the world, and we were 
+terribly worried about \textbf{it}.
 
-The task could be approached semantically by identifying all abstract
+\textsc{French} \textit{Madame la Présidente, Mesdames et Messieurs les 
+Commissaires, permettez-moi de vous rappeler qu'il y a moins d'un an, nous 
+débattions en cette Assemblée de la manière de traiter la sécurité alimentaire 
+mondiale, de la question de savoir si l'on produisait suffisamment de 
+nourriture à l'échelle mondiale, et nous étions extrêmement préoccupés par 
+\textbf{ces questions}}.
+
+\end{enumerate}
+
+In \ref{ex:freetrans}, the English \textit{it} disappears from the 
+French translation as the choice in French is a complete reformulation along the 
+lines of \textit{If the Union accepts, could not we implement\ldots}. In 
+English, however, the \textit{it} must be taken cataphorically with the 
+\textit{this} referring to the need \textit{to establish standards\ldots} and 
+the exemplification sentences that follows. 
+
+In example \label{ex:shellnoun}, on the other hand, the English \textit{it} 
+refers to all what has previously been mentioned in the long sentence, a typical 
+`event' reading of the pronoun. The French translation, however, prefers a 
+translation with a full lexical noun phrase \textit{ces questions} (these 
+questions) for the same referential 
+relationship. This is a particular case of a shell-noun \cite{kolhatkar-
+etal-2013-interpreting} and we believe that our method might be useful in identifying this phenomenon using multilingual parallel data. 
+
+The task could also be approached semantically by identifying all abstract
 nouns referencing actions, nominalizations or eventualities in the text. Or one
 could decide to focus on particular syntactic configurations as
 \newcite{marasovic-etal-2017-mention}.
-
 
 Non-nominal co-reference is much less studied than nominal coreference, partly
 because of the lack of annotated corpora. In this paper, we have explored the
