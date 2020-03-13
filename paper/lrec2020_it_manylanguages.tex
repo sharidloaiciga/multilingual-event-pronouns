@@ -38,7 +38,7 @@ sharid.loaiciga@gmail.com, christian.hardmeier@lingfil.uu.se, asad.sayeed@gu.se}
 
 \abstract{ Non-nominal co-reference is much less studied than nominal
 coreference, partly because of the lack of annotated corpora. We explore the 
-possibility to exploit parallel multilingual corpora as a means of cheap 
+possibility of exploiting parallel multilingual corpora as a means of cheap 
 supervision for the classification of three different readings of the English 
 pronoun \textit{it}: entity, event or pleonastic, from their translation in 
 several languages. We found that the `event' reading is not very frequent, but can be easily predicted provided that the construction used to translate the \textit{it} example is a pronoun as well. These cases, nevertheless, are not enough to generalize to other types of non-nominal reference. \\ \newline
@@ -59,7 +59,7 @@ Department of Philosophy, Linguistics and Theory of Science, University of Gothe
 
 Nominal coreference has been studied extensively, but work on the automatic 
 recognition of non-nominal anaphora is scarce, as are annotated data sets. Among 
-the challenges of non-nominal anaphora is the difficulty to characterize the 
+the challenges of non-nominal anaphora is the difficulty of characterizing the 
 large variance of antecedent types, which often include clauses, sentences, and 
 even paragraphs. Here we focus on the English pronoun \textit{it} and its 
 capacity to function as anaphor for nominal entity and non-nominal event 
@@ -199,13 +199,13 @@ The many uses of \textit{it} are also particularly relevant in dialog texts, whe
 event reference is much more common than in news data. In this context,
 \newcite{muller-2007-resolving} proposes a disambiguation of \textit{it} together with
 the deictic pronouns \textit{this} and \textit{that}.  Finally, \newcite{Lee2016} create a corpus
-for it-disambiguation in question answering, a domain close to dialog. It is
+for \textit{it}-disambiguation in question answering, a domain close to dialog. It is
 worth noting that current coreference resolution systems are not trained to
 manage dialog data.
 
 More recently,  \newcite{Loaiciga2017itrnn} proposed a semi-supervised setup
-based on a combination of syntactic and semantic features used in a two-step
-classification approach where a maximum entropy classifier is used first and a
+based on a combination of syntactic and semantic features. They used these features in a two-step
+classification approach where a maximum entropy classifier was applied first and a
 recurrent recursive network (RNN) after. \newcite{yaneva-etal-2018-classifying},
 on the other hand, report on experiments using features from eye gaze that prove
 to be more effective than any of the other types of features reported in
@@ -222,7 +222,7 @@ and word-level alignments files, as well as a toolbox for corpus processing
 \cite{aulamo-et-al-opus}. 
 
 We use all 15 languages paired with English as the 
-source language. The languages are German, Spanish, Estonian, Finnish, 
+source language. These languages are German, Spanish, Estonian, Finnish, 
 Hungarian, Italian, Latvian, Dutch, Polish, Portuguese, Romanian, Slovak, 
 Slovenian, and Swedish. The data labeling method is as follows:
 
@@ -241,11 +241,11 @@ identify all instances of the pronoun \textit{it}.
 extract the aligned translation in each of the target languages.
 
 Word alignment is not perfect. One-to-one correspondences are unstable for
-particles and other small word forms, in particular if they depend on verbs and 
-might be translated by just one verb form, virtually disappearing then from the
+particles and other small word forms, particularly if they depend on verbs and 
+might be translated by just one verb form, thus virtually disappearing from the
 translation. Pronouns in particular, depending on the language, might not be
-translated for instance if the language allows pro-drop, or they might be
-translated with a construction that is not a pronoun, for instance if there is a 
+translated if, e.g.,~the language allows pro-drop, or they might be
+translated with a construction that is not a pronoun, e.g.,~if there is a 
 mismatch in the number of arguments between the source and target verbs.
 
 %she was awarded the medal -> on lui a donné une medaille 
@@ -260,7 +260,7 @@ files), we search for a pronoun translation within the window range.
 
 We consider all instances 
 translated with the neutral demonstrative pronouns \textit{cela}, \textit{ceci} or 
-\textit{ça} as events. In French, these pronoun are typically used to reference 
+\textit{ça} as events. In French, these pronouns are typically used to refer to 
 proposition or phrases. 
 
 For the entity nominal case, we took the French translations \textit{elle} and 
@@ -284,13 +284,13 @@ it & \textit{cela/ça/ceci} & event &  910\\
 it  &  -- &pleonastic & 10,222 \\
 \bottomrule
 \end{tabular} 
-\caption{Summary of the translation assumptions and the total examples 
+\caption{Summary of the translation assumptions and the total number of examples 
 annotated automatically. }\label{tab:labelingtotals} 
 \end{table}
 
 
 \item The translations from the other 14 languages that are not French are used as 
-features for a classification task (Section \ref{sec:experiments}). We present an example in 
+features in a classification task (Section \ref{sec:experiments}). We present an example in 
 Figure \ref{fig:featuresexample}, where each line represents a feature vector.
 
 \end{enumerate}
@@ -339,11 +339,11 @@ LV&NL & PL & PT &  RO& SK& SL& SV  \\ &&&&&&&&&&&&&\\
 
 
 A manual analysis of a sample of 600 instances confirms that an important drawback of  
-the method is the large number of examples for which a label cannot be determined, 
+this method is the large number of examples for which a label cannot be determined, 
 as shown in the column `Unknown' in Table \ref{tab:manualsample600} (these examples are not counted in our 22,615 labeled examples reported above). 
 As for the examples that are labeled, the main 
 problem is the annotation of pleonastics as nominals. Since we take pleonastic 
-from the parsing annotation, these are therefore undetected expletive constructions by the parser that get labeled as nominals by our assumption that French \textit{il} corresponds to an `entity' reading. In addition, 
+from the parsing annotation, these are therefore expletive constructions undetected by the parser that get labeled as nominals by our assumption that French \textit{il} corresponds to an `entity' reading. In addition, 
 there is a natural imbalance in the classes, with 
 nominal and pleonastic instances being largely more frequent than events.  
 
@@ -352,7 +352,7 @@ be seen in Table \ref{tab:manualsample600} that the automatic labeling achieves
 approximately 30\% accuracy overall (133/600) and 70\% accuracy if only successfully labeled  
 examples are considered (133/189). A closer 
 inspection of the `unknown' labels reveals that these are mostly due to many 
-divergent translation from the assumptions we made by using French as the seed 
+translations divergent from the assumptions we made by using French as the seed 
 language. Another reason is alignment errors. 
 
 
@@ -438,8 +438,8 @@ classifier.} \label{tab:maxentautomatic}
 %At this point is important to have in mind that only 30\% of the examples in the 
 %sample are actually automatically labeled, in the case of the `event' class in particular only 6 examples are accurately labeled. 
 
-To determine whether the imbalance in the data is a factor preventing the model 
-to learn the distinction, in a second experiment, we used bootstrap with resampling in order to achieve the same number of examples per class. The data distribution for this experiment is given in Table \ref{tab:resamplingdata}.
+In order to determine whether the imbalance in the data is a factor preventing the model 
+from learning the distinction, we used bootstrap with resampling in a second experiment so as to achieve the same number of examples per class. The data distribution for this experiment is given in Table \ref{tab:resamplingdata}.
 
 \begin{table}[h!]\centering
 \begin{tabular}{ccc}
@@ -481,9 +481,8 @@ translations as features for the different readings of \textit{it} is a good
 method for 
 the cases of \textit{it} that are captured by the seed language assumptions, 
 most probably because  
-these cases also present a pronoun translation in the other languages. These 
-represent about 30\% of the total amount of pronouns 
-\textit{it} and unfortunately they do not seem to generalize to the rest of the 
+these cases also provide a pronoun translation in the other languages. These 
+represent about 30\% of the total amount of \textit{it}-pronouns, and unfortunately, they do not seem to generalize to the rest of the 
 cases. 
 
 Further analysis from the output of a decision tree classifier on the same data 
@@ -523,9 +522,9 @@ the top of the tree and have the form \texttt{pronoun\_language}.}\label{fig:dec
 
 
 
-Although we originally sought to identify systematic translations patterns 
+Although we originally sought to identify systematic translation patterns 
 indicative of non-nominal uses of \textit{it}, through 
-developing this method we found that apart from the pronoun-to-pronoun 
+developing this method, we found that apart from the pronoun-to-pronoun 
 translation pattern, there is too much variability in the data. 
 
 Take for instance the following examples:
@@ -577,7 +576,7 @@ French translation as the choice in French is a complete reformulation along the
 lines of \textit{If the Union accepts, could not we implement\ldots}. In 
 English, however, the \textit{it} must be taken cataphorically with the 
 \textit{this} referring to the need \textit{to establish standards\ldots} and 
-the exemplification sentences that follows. 
+the exemplification sentence that follows. 
 
 In example \label{ex:shellnoun}, on the other hand, the English \textit{it} 
 refers to all what has previously been mentioned in the long sentence, a typical 
@@ -585,18 +584,18 @@ refers to all what has previously been mentioned in the long sentence, a typical
 translation with a full lexical noun phrase \textit{ces questions} (these 
 questions) for the same referential 
 relationship. This is a particular case of a shell-noun 
-\cite{kolhatkar-etal-2013-interpreting} and we believe that our method might be useful in identifying this phenomenon using multilingual parallel data. 
+\cite{kolhatkar-etal-2013-interpreting}, and we believe that our method might be useful in identifying this phenomenon using multilingual parallel data. 
 
 The task could also be approached semantically by identifying all abstract
-nouns referencing actions, nominalizations or eventualities in the text. Alternatively, one could focus on particular syntactic configurations as
+nouns referencing actions, nominalizations, or eventualities in the text. Alternatively, one could focus on particular syntactic configurations as
 \newcite{marasovic-etal-2017-mention}.
 
 Non-nominal co-reference is much less studied than nominal coreference, partly
 because of the lack of annotated corpora. In this paper, we have explored the
-possibility to exploit parallel multilingual corpora as a means of cheap
-supervision for the task of it-disambiguation. Since pronoun \textit{it} has many
-potential uses or readings, we took it a as representative of the non-nominal
-coreference phenomenon, however, we found that only a very specific subset of examples are discernible using our approach. 
+possibility of exploiting parallel multilingual corpora as a means of cheap
+supervision for the task of \textit{it}-disambiguation. Since pronoun \textit{it} has many
+potential uses or readings, we took it as representative of the non-nominal
+coreference phenomenon; however, we found that only a very specific subset of examples are discernible using our approach. 
 
 %\cite{Martin-90}
 %
@@ -604,7 +603,12 @@ coreference phenomenon, however, we found that only a very specific subset of ex
 %
 %
 \section{Acknowledgements}
+Sharid Lo\'{a}iciga and Asad Sayeed were supported by the Swedish Research
+Council under grant 2014-30 for the establishment of the
+Centre for Linguistic Theory and Studies in Probability (CLASP) at
+the University of Gothenburg.
 Christian Hardmeier was supported by the Swedish Research Council under grant 2017-930.
+
 %
 %Place all acknowledgements (including those concerning research grants and
 %funding) in a separate section at the end of the paper.
